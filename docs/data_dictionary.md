@@ -363,3 +363,78 @@ Recommended fields:
 - `shradrflg`
 
 Do not download the full history yet. The first extraction should use a short date range and be treated as a schema / quality-control test.
+
+
+---
+
+# 8. Source: CRSP Stock Version 2 (CIZ) — Delisting Information
+
+WRDS product: `crsp_a_stock`  
+WRDS library: `crspa`  
+WRDS file observed in the interface: `stkdelists`  
+Coverage observed in WRDS: delisting dates from 1962-06-24 through 2025-12-30.
+
+This table is used to identify delisting events and recover delisting-related returns that may not be represented by an ordinary month-end continuation return.
+
+## 8.1 Confirmed fields
+
+| Variable | Type | WRDS description | Planned use |
+|---|---|---|---|
+| `primaryexch` | Character | Primary Exchange | Delisting-event diagnostics |
+| `nasdissuno` | Integer | Nasdaq Issue Number | Reference only |
+| `siccd` | Integer | SIC Code | Industry reference |
+| `permno` | Integer | PERMNO | Primary merge key |
+| `delistingdt` | Date | Delisting Date | Event date |
+| `deldtprc` | Decimal | Delisting Date Price | Delisting price diagnostics |
+| `deldtprcflg` | Character | Delisting Date Price Flag | Data-quality diagnostics |
+| `delactiontype` | Character | Delisting Corporate Action Type | Event classification |
+| `delstatustype` | Character | Delisting Completion Status Type | Event-status diagnostics |
+| `delreasontype` | Character | Delisting Reason Type | Cause-of-delisting classification |
+| `delpaymenttype` | Character | Delisting Payment Summary Type | Payment classification |
+| `delpermno` | Integer | Delisting PERMNO | Delisting-security reference |
+| `delpermco` | Integer | Delisting PERMCO | Delisting-company reference |
+| `delret` | Decimal | Delisting Total Return | **Primary delisting-return field** |
+| `delretmisstype` | Character | Delisting Return Missing Type | Missing-return classification |
+| `delnextdt` | Date | Delisting Next Price Date | Post-delisting price reference |
+| `delnextprc` | Decimal | Delisting Next Price | Post-delisting value diagnostics |
+| `delnextprcflg` | Character | Delisting Next Price Flag | Data-quality diagnostics |
+| `delamtdt` | Date | Delisting Amount Date | Cash/distribution timing |
+| `deldivamt` | Decimal | Delisting Dividend Amount | Delisting distribution diagnostics |
+| `deldistype` | Character | Delisting Distributions Type | Distribution classification |
+| `deldlydt` | Date | Delisting Daily Date | Daily alignment field |
+
+## 8.2 Primary research implication
+
+The presence of `delret` confirms that delisting returns are explicitly available in CIZ.
+
+The production holding-period return logic should therefore account for both:
+
+- the ordinary monthly total return from the Monthly Stock File; and
+- the delisting total return from Delisting Information where applicable.
+
+The exact combination rule will be taken from the official CRSP CIZ documentation before implementation. We will **not** automatically copy the legacy SIZ formula without verifying that CIZ uses the same return semantics.
+
+## 8.3 Missing delisting returns
+
+`delretmisstype` must be examined whenever `delret` is missing.
+
+The project will not silently replace missing delisting returns with zero.
+
+Any imputation rule, if needed, must be:
+
+1. justified from CRSP documentation or established literature;
+2. specified before the main portfolio results are interpreted;
+3. separately tested as a robustness choice where appropriate.
+
+## 8.4 Merge logic — provisional
+
+Primary merge key:
+
+- `permno`
+
+Time alignment:
+
+- use `delistingdt` / relevant monthly date to attach the event to the correct holding period;
+- validate against `mthdelflg` in the Monthly Stock File.
+
+The exact merge code will be tested on a small date range before the full sample is downloaded.
