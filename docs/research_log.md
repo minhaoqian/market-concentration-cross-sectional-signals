@@ -106,3 +106,37 @@ All signal definitions are oriented so that a higher signal value corresponds to
 - transaction-cost assumptions;
 - HAC/Newey-West lag rule;
 - final sample start date if data availability requires revision.
+
+---
+
+## 29 September 2026 — CRSP CIZ schema confirmation
+
+### Daily Stock File confirmed
+
+Reviewed the WRDS Variable Descriptions for **CRSP Stock Version 2 (CIZ) — Daily Stock File**.
+
+Confirmed key CIZ fields include:
+
+- `permno`, `permco`
+- `ticker`, `tradingsymbol`, `issuernm`
+- `issuertype`, `securitytype`, `securitysubtype`, `sharetype`
+- `primaryexch`, `siccd`, `naics`, `icbindustry`
+- `dlycaldt`
+- `dlyprc`
+- `dlycap`
+- `dlyret`, `dlyretx`, `dlyreti`
+- `dlyvol`
+- relevant return / price / capitalization flags
+- delisting-related classification fields.
+
+### Important schema revision
+
+The project was initially drafted using legacy CRSP conventions such as SHRCD and EXCHCD. The available WRDS product is CIZ, which exposes newer classification fields.
+
+The production common-stock and exchange filters will therefore be redefined using the official CIZ coding documentation before any main result is run.
+
+This is a data-schema revision made before viewing results.
+
+### Next step
+
+Inspect the Monthly Stock File variable descriptions and then the Delisting Information schema.
