@@ -262,3 +262,39 @@ The NYSE breakpoint is calculated point-in-time each month from eligible NYSE co
 ### Next unresolved issue
 
 Confirm the exact CIZ delisting-return semantics so that MthRet and DelRet are combined without double counting.
+
+
+---
+
+## 29 September 2026 — Monthly production pipeline scaffold
+
+Created the first reproducible Python implementation of the monthly data pipeline.
+
+### New files
+
+- `src/clean_monthly.py`
+- `src/concentration.py`
+- `notebooks/01_monthly_data_audit.ipynb`
+
+### Cleaning logic implemented
+
+- exact full-row deduplication;
+- hard failure if non-identical PERMNO-month duplicates remain;
+- primary-exchange filter N/A/Q;
+- positive market-cap requirement;
+- monthly NYSE 20th-percentile market-cap breakpoint;
+- $5 price screen;
+- explicit audit table of row and security counts at each stage.
+
+### Concentration measures implemented
+
+- Top-5 market-cap share;
+- Top-10 market-cap share;
+- HHI;
+- effective number of firms (1 / HHI);
+- aggregate market capitalisation;
+- monthly security counts.
+
+### Research discipline
+
+The notebook is an audit / validation notebook. It does not yet estimate factor returns or test the main hypothesis.
