@@ -175,3 +175,42 @@ Market capitalization therefore does not need to be reconstructed from price × 
 ### Next step
 
 Inspect the separate Delisting Information schema before locking the production return construction and then run a small test extraction rather than immediately downloading the full sample.
+
+
+---
+
+## 29 September 2026 — Delisting Information schema confirmation
+
+Reviewed the CRSP CIZ Delisting Information variable descriptions.
+
+Confirmed fields include:
+
+- `permno`
+- `delistingdt`
+- `deldtprc`
+- `deldtprcflg`
+- `delactiontype`
+- `delstatustype`
+- `delreasontype`
+- `delpaymenttype`
+- `delpermno`
+- `delpermco`
+- `delret`
+- `delretmisstype`
+- `delnextdt`
+- `delnextprc`
+- `delnextprcflg`
+- `delamtdt`
+- `deldivamt`
+- `deldistype`
+- `deldlydt`.
+
+### Important implication
+
+CIZ provides an explicit `delret` field for delisting total return. The project will therefore incorporate delisting events rather than relying only on ordinary monthly returns.
+
+The exact monthly-return + delisting-return combination rule remains intentionally unlocked until the official CIZ documentation is checked.
+
+### Next step
+
+Move from schema discovery to a small WRDS test extraction, while also confirming the official CIZ coding and return-construction documentation before freezing Version 1.0 of the analysis plan.
