@@ -214,3 +214,51 @@ The exact monthly-return + delisting-return combination rule remains intentional
 ### Next step
 
 Move from schema discovery to a small WRDS test extraction, while also confirming the official CIZ coding and return-construction documentation before freezing Version 1.0 of the analysis plan.
+
+
+---
+
+## 29 September 2026 — Sample-construction protocol v0.1
+
+### Official CIZ universe mapping locked
+
+The primary common-stock universe now uses the official WRDS CIZ mapping of legacy CRSP share codes 10/11:
+
+- ShareType = NS
+- SecurityType = EQTY
+- SecuritySubType = COM
+- USIncFlg = Y
+- IssuerType in {ACOR, CORP}
+
+The primary exchange universe uses:
+
+- PrimaryExch = N — NYSE
+- PrimaryExch = A — NYSE MKT / NYSE American
+- PrimaryExch = Q — NASDAQ
+
+The earlier legacy SHRCD / EXCHCD wording in analysis_plan.md has been replaced accordingly.
+
+### Duplicate investigation resolved
+
+A filtered 2024 Monthly Stock File test pull contained 47,143 rows and 4,153 unique PERMNO values.
+
+There were 199 rows across 99 duplicated PERMNO-month groups. After distribution fields were excluded, every remaining duplicate was an exact full-row duplicate.
+
+Production rule:
+
+1. remove exact full-row duplicates;
+2. assert uniqueness of PERMNO + MthCalDt;
+3. halt if any non-identical duplicate key remains.
+
+### Size and price screens
+
+Primary screens remain:
+
+- MthPrc >= $5;
+- monthly market cap >= the 20th percentile of NYSE MthCap.
+
+The NYSE breakpoint is calculated point-in-time each month from eligible NYSE common stocks before applying the final retained-universe rule.
+
+### Next unresolved issue
+
+Confirm the exact CIZ delisting-return semantics so that MthRet and DelRet are combined without double counting.
