@@ -140,3 +140,38 @@ This is a data-schema revision made before viewing results.
 ### Next step
 
 Inspect the Monthly Stock File variable descriptions and then the Delisting Information schema.
+
+
+---
+
+## 29 September 2026 — Monthly Stock File schema confirmation
+
+Reviewed the CIZ Monthly Stock File variable descriptions.
+
+Confirmed primary fields include:
+
+- `mthcaldt`
+- `mthprc`
+- `mthcap`
+- `mthprevcap`
+- `mthret`
+- `mthretx`
+- `mthretflg`
+- `mthdelflg`
+- `mthvol`
+- `shrout`
+- distribution / adjustment metadata.
+
+### Major design implication
+
+The primary monthly pipeline can use:
+
+- `mthret` for momentum, reversal, and next-month realised return;
+- `mthprc` for the $5 screen;
+- `mthcap` for market-cap weighting and Top-10 / HHI concentration measures.
+
+Market capitalization therefore does not need to be reconstructed from price × shares outstanding in the primary specification unless validation checks show a discrepancy.
+
+### Next step
+
+Inspect the separate Delisting Information schema before locking the production return construction and then run a small test extraction rather than immediately downloading the full sample.
