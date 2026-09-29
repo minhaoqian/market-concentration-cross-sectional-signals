@@ -212,3 +212,154 @@ Before this dictionary becomes Version 1.0, inspect and document:
 4. Share Outstanding;
 5. Daily / Monthly Stock Market Indexes;
 6. official CIZ code values for common-stock and exchange filters.
+
+
+---
+
+# 6. Source: CRSP Stock Version 2 (CIZ) — Monthly Stock File
+
+WRDS product: `crsp_a_stock`  
+WRDS library: `crspa`  
+WRDS file/query family observed in the interface: `wrds_msfv2_query`  
+Coverage observed in WRDS: monthly calendar dates from 1925-12-31 through 2025-12-31.
+
+The Monthly Stock File is the primary backbone for monthly signal formation, portfolio construction, concentration measurement, and next-month realised returns.
+
+## 6.1 Core identifiers and metadata
+
+Confirmed fields visible in the CIZ Monthly Stock File include:
+
+| Variable | Type | WRDS description | Planned use |
+|---|---|---|---|
+| `permno` | Integer | PERMNO | Primary security identifier |
+| `permco` | Integer | PERMCO | Issuer-level identifier |
+| `ticker` | Character | Ticker | Human-readable diagnostics only |
+| `tradingsymbol` | Character | Trading Symbol | Diagnostics |
+| `issuernm` | Character | Issuer Name | Reporting / identity checks |
+| `siccd` | Integer | SIC Code | Industry / sector mapping candidate |
+| `naics` | Character | NAICS Code | Industry mapping candidate |
+| `icbindustry` | Character | ICB Industry Code | Sector-neutralisation candidate |
+
+The same point-in-time identifier rule applies as in the Daily Stock File: `permno` is the primary research key; ticker is not.
+
+## 6.2 Dates and completeness
+
+| Variable | Type | WRDS description | Planned use |
+|---|---|---|---|
+| `yyyymm` | Integer | YYYYMM - Monthly Calendar Period Key | Convenience month key |
+| `mthcaldt` | Date | Monthly Calendar Date | Primary monthly time index |
+| `mthcompflg` | Character | Monthly Completeness Flag | Data-quality checks |
+| `mthcompsubflg` | Character | Monthly Completeness Sub-Flag | Data-quality checks |
+
+## 6.3 Price, capitalization, returns, and volume
+
+| Variable | Type | WRDS description | Planned use |
+|---|---|---|---|
+| `mthprc` | Decimal | Monthly Price | Primary month-end price screen |
+| `mthprcflg` | Character | Monthly Price Flag | Price-quality check |
+| `mthprcdt` | Date | Monthly Price Date | Timing validation |
+| `mthdtflg` | Character | Monthly Price Date Flag | Timing / data-quality diagnostics |
+| `mthdelflg` | Character | Monthly Delisting Flag | Identify delisting-linked monthly observations |
+| `mthcap` | Decimal | Monthly Market Capitalization | **Primary market-cap field** for weighting and concentration |
+| `mthprevprc` | Decimal | Monthly Previous Price | Diagnostics / lagged information |
+| `mthprevprcflg` | Character | Monthly Previous Price Flag | Diagnostics |
+| `mthprevdt` | Date | Monthly Previous Price Date | Timing diagnostics |
+| `mthprevdtflg` | Character | Monthly Previous Date Flag | Timing diagnostics |
+| `mthprevcap` | Decimal | Monthly Previous Total Capitalization | Candidate lagged weight field / diagnostics |
+| `mthret` | Decimal | Monthly Total Return | **Primary monthly return** |
+| `mthretx` | Decimal | Monthly Return Without Dividends | Return decomposition / diagnostics |
+| `mthretflg` | Character | Monthly Return Flag | Return-quality / missingness checks |
+| `mthdiscnt` | Integer | Monthly Distribution Count | Corporate-action diagnostics |
+| `mthvol` | Decimal | Monthly Volume | Liquidity diagnostics |
+
+## 6.4 Share information visible in the Monthly Stock File
+
+| Variable | Type | WRDS description | Planned use |
+|---|---|---|---|
+| `shrstartdt` | Date | Share Information Start Date | Point-in-time validity |
+| `shrenddt` | Date | Share Information End Date | Point-in-time validity |
+| `shrout` | Integer | Shares Outstanding | Audit / market-cap reconstruction if needed |
+| `shrsource` | Character | Share Change Source Type | Share-data diagnostics |
+| `shrfactype` | Character | Share Factor Type | Corporate-action diagnostics |
+| `shradrflg` | Character | Share ADR Flag | Sample diagnostics / potential ADR exclusion |
+
+The presence of both `mthcap` and `shrout` means market capitalization does not need to be reconstructed manually for the primary specification unless validation checks reveal a reason to do so.
+
+## 6.5 Distribution fields visible in the Monthly Stock File
+
+The monthly schema also exposes distribution-related variables including:
+
+- `disexdt` — Ex-Distribution Date
+- `disseqnbr` — Distribution Sequence Number
+- `disordinaryflg` — Distribution Ordinary Dividend Flag
+- `distype` — Distribution Type
+- `disfreqtype` — Distribution Frequency Type
+- `dispaymenttype` — Distribution Payment Method Type
+- `disdetailtype` — Distribution Detail Type
+- `distaxtype` — Distribution Tax Status Type
+- `disorigcurtype` — Distribution Original Currency Type
+- `disdivamt` — Dividend Amount
+- `disfacpr` — Factor To Adjust Price
+- `disfacshr` — Factor To Adjust Shares
+
+These fields are useful for corporate-action auditing, but the primary return signal should use `mthret` rather than manually reconstructing total return unless CRSP CIZ documentation requires otherwise.
+
+## 6.6 Primary mapping from research design to monthly fields
+
+The following primary mappings are now supported directly by the CIZ Monthly Stock File:
+
+| Research component | Primary field(s) |
+|---|---|
+| Momentum | `mthret` |
+| Short-term reversal | `mthret` |
+| Next-month realised portfolio return | `mthret` |
+| $5 price screen | `mthprc` |
+| Market-cap weighting | `mthcap` |
+| Top-10 concentration | `mthcap` |
+| HHI concentration | `mthcap` |
+| Delisting diagnostics | `mthdelflg` plus separate Delisting Information table |
+| Liquidity diagnostics | `mthvol` |
+| Industry / sector mapping candidate | `siccd`, `naics`, `icbindustry` |
+
+## 6.7 Implications for the project design
+
+1. **Momentum and reversal can be built entirely from monthly CIZ returns.**
+2. **Market capitalization is directly available as `mthcap`.**
+3. **The primary price screen can use `mthprc`.**
+4. **The market-cap concentration measures can be computed directly from `mthcap`.**
+5. **Shares outstanding are available for validation rather than mandatory reconstruction.**
+6. **Monthly completeness, price, and return flags should be inspected before final missing-data rules are locked.**
+
+---
+
+# 7. Current preferred field set for the first monthly extraction
+
+The first test extraction should be deliberately small and include only fields needed to validate the schema and sample logic.
+
+Recommended fields:
+
+- `permno`
+- `permco`
+- `mthcaldt`
+- `ticker`
+- `issuernm`
+- `primaryexch`
+- `securitytype`
+- `securitysubtype`
+- `sharetype`
+- `siccd`
+- `naics`
+- `icbindustry`
+- `mthprc`
+- `mthprcflg`
+- `mthcap`
+- `mthprevcap`
+- `mthret`
+- `mthretx`
+- `mthretflg`
+- `mthdelflg`
+- `mthvol`
+- `shrout`
+- `shradrflg`
+
+Do not download the full history yet. The first extraction should use a short date range and be treated as a schema / quality-control test.
