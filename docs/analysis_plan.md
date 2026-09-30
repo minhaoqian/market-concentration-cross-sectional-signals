@@ -591,3 +591,37 @@ Pre-specified robustness / secondary analyses:
 - Low/Medium/High concentration states using expanding historical tertiles.
 
 Regime thresholds at month t use only concentration observations through t-1 and require at least 60 months of prior history.
+
+
+---
+
+## Mega-cap composition test
+
+This stage is locked before results are viewed.
+
+### Primary
+
+- rank companies monthly by broad-market PERMCO market capitalisation;
+- exclude all securities belonging to the top 10 PERMCO companies from the momentum formation universe;
+- keep the 12–2 momentum signal definition unchanged;
+- recompute quintiles after exclusion;
+- compare value-weighted Q5 minus Q1 with the baseline.
+
+Primary estimand:
+
+```text
+Delta_t = Spread_ExTop10_t - Spread_Baseline_t
+```
+
+Inference:
+- HAC6 primary;
+- HAC12 robustness.
+
+### Pre-specified robustness
+
+- exclude top 5 PERMCO companies;
+- exclude top 20 PERMCO companies;
+- compare equal-weighted spread;
+- compare Rank IC.
+
+Top-N membership is always determined from the broad market-state universe at formation month t.
