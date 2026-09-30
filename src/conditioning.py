@@ -198,3 +198,36 @@ def regime_descriptives(
         .groupby(regime_col, observed=True)[keep]
         .agg(["count", "mean", "median"])
     )
+
+
+def lag_concentration_one_month(
+    concentration: pd.DataFrame,
+    date_col: str = "MthCalDt",
+    columns: tuple[str, ...] = ("Top10Share", "HHI"),
+) -> pd.DataFrame:
+    """Create one-calendar-month lagged concentration measures.
+
+    For a formation month t, this returns concentration measured at t-1.
+
+    The function verifies that the concentration series is contiguous in
+    calendar months before applying the lag. This avoids relying on exact
+    month-end dates, which can differ because CRSP uses the final trading day.
+    """
+    x = concentration[[date_col, *columns]].copy()
+    x[date_col] = pd.to_datetime(x[date_col], errors="raise")
+    x = x.sort_values(date_col).reset_index(drop=True)
+
+    month_id = x[date_col].dt.year * 12 + x[date_col].dt.month
+    gaps = month_id.diff().dropna()
+    if not (gaps == 1).all():
+        bad = x.loc[gaps.index[gaps != 1], date_col].head(10).tolist()
+        raise ValueError(
+            "Concentration series is not contiguous by calendar month. "
+            f"Example problematic dates: {bad}"
+        )
+
+    out = x[[date_col]].copy()
+    for col in columns:
+        out[f"{col}_Lag1"] = pd.to_numeric(x[col], errors="coerce").shift(1)
+
+    return out
