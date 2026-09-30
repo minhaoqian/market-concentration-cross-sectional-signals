@@ -746,3 +746,47 @@ The project spread is aligned by holding month (formation t -> realised t+1).
 Because the portfolio constructions differ, the primary validation criterion is
 economically meaningful positive co-movement, not equality of means or a
 one-for-one factor beta.
+
+
+---
+
+## 1 October 2026 — External momentum validation passed
+
+The project momentum implementation was externally validated against the
+Kenneth French US monthly Momentum Factor (Mom), aligned by realised holding
+month (formation t -> return t+1).
+
+Common sample: 299 monthly observations.
+
+Summary:
+- Project VW mean = 0.000746, monthly vol = 0.055643.
+- Project EW mean = 0.002457, monthly vol = 0.046319.
+- French Mom mean = 0.002021, monthly vol = 0.046342.
+- Corr(Project VW, French Mom) = 0.875434.
+- Corr(Project EW, French Mom) = 0.916523.
+
+Diagnostic regressions:
+- Project VW on French Mom: beta = 1.0511, HAC SE = 0.0742,
+  t = 14.18, p < 1e-40, 95% CI [0.9058, 1.1965], R2 = 0.766;
+  alpha = -0.001379, p = 0.404.
+- Project EW on French Mom: beta = 0.9161, HAC SE = 0.0388,
+  t = 23.61, p < 1e-100, 95% CI [0.8400, 0.9921], R2 = 0.840;
+  alpha = +0.000606, p = 0.590.
+
+Interpretation: the project's momentum series co-move very strongly with the
+established external benchmark despite intentionally different portfolio
+construction. The weak project VW mean is therefore not evidence of an obvious
+timing or implementation failure. External validation passes.
+
+## CRSP CIZ delisting-return treatment verified from official documentation
+
+The CRSP CIZ cross-reference and database guides state that CIZ MthRet is
+constructed from compounded daily returns and that this daily-compounding
+treatment also applies to delisting returns. The CIZ field documentation also
+notes that monthly return fields can include a delisting return when
+appropriate.
+
+Therefore the project's use of CIZ MthRet does not require a separate legacy
+DLRET merge to incorporate delisting returns. The final paper should document
+this distinction explicitly because legacy CRSP workflows often merge DLRET
+separately.
