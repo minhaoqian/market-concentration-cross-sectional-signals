@@ -664,3 +664,23 @@ final synthesis rather than further specification expansion.
 
 A working integrated interpretation is now documented in
 `docs/final_synthesis.md`.
+
+---
+
+## 30 September 2026 — Beta-neutral diagnostics completed; synthesis stage opened
+
+The beta-neutral portfolio analysis is now complete.
+
+Key findings:
+- beta coverage is complete within the realised Q1/Q5 momentum legs, so the beta-coverage effect on the spread is zero;
+- average ex-ante Q5-Q1 beta is close to zero but varies materially over time;
+- the primary market-overlay hedge lowers average VW momentum performance by roughly 11 bps per month in point estimates;
+- the neutralisation effect is statistically imprecise under both HAC6 and HAC12;
+- the leg-rescaling robustness construction has the same directional effect;
+- the ex-post monthly market beta falls materially after hedging, from roughly -0.38 to roughly -0.16, but is not eliminated;
+- correlation between ex-ante net beta and the following holding month's market excess return is about 0.05;
+- beta by market-return quintile is non-monotonic, so the ex-ante/ex-post beta gap is not explained by a simple market-state relation.
+
+No further beta specification is added. This avoids post-result specification search.
+
+The project now moves to final synthesis, figures/tables, and research-paper packaging.
