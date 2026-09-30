@@ -578,3 +578,19 @@ New files:
 - `src/industry_neutral.py`
 - `notebooks/10_industry_neutral_momentum.ipynb`
 - `docs/reference/Siccodes49.txt`
+
+
+---
+
+## 30 September 2026 — Daily beta-input audit scaffold
+
+Before rolling beta estimation, the project validates three daily inputs:
+1. CRSP CIZ daily stock returns;
+2. CRSP value-weighted daily market total return;
+3. Kenneth French daily RF.
+
+The audit checks PERMNO-date uniqueness, missingness, return magnitudes, market/RF date overlap, RF unit conversion, and representative formation-date history availability under the pre-specified 252-day window, 5-day skip, and 126-observation minimum.
+
+New files:
+- src/daily_data.py
+- notebooks/11_daily_data_audit.ipynb
