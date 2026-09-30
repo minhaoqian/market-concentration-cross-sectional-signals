@@ -594,3 +594,29 @@ The audit checks PERMNO-date uniqueness, missingness, return magnitudes, market/
 New files:
 - src/daily_data.py
 - notebooks/11_daily_data_audit.ipynb
+
+
+---
+
+## 30 September 2026 — Daily duplicate resolution and beta methodology lock
+
+The CRSP daily stock extract contained 16,259 rows belonging to 7,837
+duplicated PERMNO-date groups. Investigation showed that every duplicated-key
+row was an exact full-row duplicate and every group had one unique DlyRet.
+There were 8,422 redundant rows beyond the first copy and zero conflicting
+daily-return groups. The daily reader now removes exact duplicates only and
+fails if any non-identical PERMNO-date duplicate remains.
+
+Ex-ante stock beta methodology was frozen before portfolio results:
+- CAPM OLS on daily excess returns;
+- CRSP stock total return and CRSP VW market total return;
+- Kenneth French daily RF;
+- 252 CRSP market trading-day window;
+- skip the 5 market trading days immediately before formation;
+- minimum 126 valid paired observations;
+- fixed CRSP market calendar, not stock-specific observed-day counting;
+- no winsorisation, clipping, forward-fill or beta imputation.
+
+Portfolio neutralisation is not yet implemented. Beta estimates must first pass
+coverage, distribution and extreme-value diagnostics in
+`notebooks/12_beta_estimation.ipynb`.
