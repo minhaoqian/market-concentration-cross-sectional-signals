@@ -329,3 +329,36 @@ Security-level PERMNO concentration is retained as a robustness measure.
 Signal construction remains at the PERMNO level.
 
 This revision occurred before momentum construction and before any concentration-signal relationship was estimated.
+
+
+---
+
+## 30 September 2026 — Momentum implementation scaffold
+
+### Primary signal implemented
+
+Added the pre-specified 12–2 momentum signal:
+
+- formation date: month-end t;
+- lookback returns: t-12 through t-2;
+- month t-1 skipped;
+- 11 monthly returns compounded;
+- contiguous monthly history required.
+
+### Important timing correction
+
+Signal history and next-month realised returns are sourced from a broader security-level monthly history panel that is cleaned for duplicates and exchange eligibility but is **not** filtered by the formation-date $5 price screen or NYSE-size breakpoint outside month t.
+
+This avoids two biases:
+
+1. losing legitimate lookback returns because a stock failed the investability screen in an earlier month;
+2. losing t+1 realised returns because a selected stock failed the formation screen in the following month.
+
+Formation eligibility remains determined by the clean panel at month t.
+
+### New files
+
+- `src/signals.py`
+- `notebooks/02_momentum_signal.ipynb`
+
+The momentum notebook stops at construction and sanity checks. No concentration-conditioning test has yet been run.
