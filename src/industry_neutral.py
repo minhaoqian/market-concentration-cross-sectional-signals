@@ -26,7 +26,7 @@ import numpy as np
 import pandas as pd
 
 
-FF49_DEFINITION_PATH = Path("docs/reference/Siccodes49.txt")
+PROJECT_ROOT = Path(__file__).resolve().parents[1]\nFF49_DEFINITION_PATH = PROJECT_ROOT / "docs" / "reference" / "Siccodes49.txt"
 
 
 def parse_ff49_definitions(path: str | Path = FF49_DEFINITION_PATH) -> pd.DataFrame:
