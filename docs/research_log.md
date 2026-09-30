@@ -620,3 +620,30 @@ Ex-ante stock beta methodology was frozen before portfolio results:
 Portfolio neutralisation is not yet implemented. Beta estimates must first pass
 coverage, distribution and extreme-value diagnostics in
 `notebooks/12_beta_estimation.ipynb`.
+
+
+---
+
+## 30 September 2026 — Ex-ante beta validation passed
+
+The frozen 252/5/126 CAPM beta estimator produced high and stable coverage
+across all 312 formation months. Overall valid-beta coverage averaged about
+97.9%. Representative-month coverage was approximately 92.3% in 2000-01,
+99.0% in 2008-12, 94.6% in 2020-12, and 98.2% in 2025-12. Median valid
+observations were 252 in every month.
+
+The overall beta distribution was centred near 1.09 (median) / 1.14 (mean).
+A small number of extreme positive and negative estimates were observed,
+including estimates below -6 and above 10. These are retained under the
+pre-specified no-winsorisation rule; the 252/5/126 specification is not changed
+after inspection.
+
+All consistency assertions passed:
+- unique PERMNO-month beta keys;
+- every non-missing beta satisfies the 126-observation minimum;
+- no estimate uses more than 252 market trading days.
+
+The beta estimation gate therefore passes. The next stage keeps original
+momentum rankings and quintile membership, separates the beta-coverage effect,
+and tests the pre-specified market-overlay beta-neutral construction. Long/short
+leg rescaling remains a robustness construction only.
