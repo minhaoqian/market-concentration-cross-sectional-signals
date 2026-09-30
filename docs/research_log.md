@@ -647,3 +647,20 @@ The beta estimation gate therefore passes. The next stage keeps original
 momentum rankings and quintile membership, separates the beta-coverage effect,
 and tests the pre-specified market-overlay beta-neutral construction. Long/short
 leg rescaling remains a robustness construction only.
+
+
+---
+
+## 30 September 2026 — Beta diagnostics closed; project enters final synthesis
+
+Additional diagnostics showed a correlation of approximately 0.05 between
+formation-date net momentum beta and next-month market excess return. Sorting
+months into market-return quintiles did not reveal a simple monotonic
+relationship between ex-ante net beta and subsequent market state.
+
+No additional beta specification is introduced. The beta-neutral chapter is
+therefore closed under the pre-specified methodology, and the project moves to
+final synthesis rather than further specification expansion.
+
+A working integrated interpretation is now documented in
+`docs/final_synthesis.md`.
