@@ -458,3 +458,26 @@ New validation notebook:
 - `notebooks/05_market_state_concentration.ipynb`
 
 No concentration-conditioned performance test has been run yet.
+
+
+---
+
+## 30 September 2026 — Core concentration test specification locked
+
+Primary:
+- X = broad-market company-level Top10Share at formation month t;
+- Y = value-weighted 12–2 momentum Q5 minus Q1 return realised in t+1;
+- beta interpreted per 10 percentage points of Top10Share;
+- two-sided HAC6 inference;
+- HAC12 robustness.
+
+Secondary / robustness:
+- linear time trend;
+- HHI;
+- equal-weighted spread;
+- Rank IC;
+- expanding-history concentration regimes using only prior data with 60 months minimum history.
+
+New files:
+- src/conditioning.py
+- notebooks/06_concentration_conditioning.ipynb
