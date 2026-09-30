@@ -1,0 +1,5 @@
+,FormationWeightShare,FormationWeightShare,ObservedWeightShare,ObservedWeightShare,ReturnContribution,ReturnContribution,TopN_SecurityCount,TopN_SecurityCount
+,mean,median,mean,median,mean,median,mean,median
+SignalQuintile,,,,,,,,
+1,0.09945395520112993,0.08258010288838341,0.09988472853835907,0.08296273953356799,0.0015374012998694883,0.0,1.0933333333333333,1.0
+5,0.1765848314560719,0.15871682887726518,0.1760498345886687,0.1572530554398201,0.002195078183216494,0.0,1.7066666666666668,1.0
