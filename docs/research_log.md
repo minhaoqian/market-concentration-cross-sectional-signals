@@ -551,3 +551,30 @@ Additional diagnostics measure mega-cap weight shares and return contributions i
 New files:
 - `src/mega_cap_decomposition.py`
 - `notebooks/09_mega_cap_decomposition.ipynb`
+
+
+---
+
+## 30 September 2026 — Industry-neutral methodology locked
+
+Primary:
+- FF49 classification from contemporaneous CRSP SICCD;
+- equal-weight monthly industry mean of raw 12-2 momentum;
+- minimum 10 valid stocks per industry-month;
+- adjusted signal = raw momentum minus industry mean;
+- global quintiles re-formed on adjusted signal;
+- primary estimand = neutral VW Q5-Q1 minus raw VW Q5-Q1;
+- HAC6 primary / HAC12 robustness.
+
+Robustness:
+- within-industry percentile signal;
+- ICBIndustry classification;
+- EW spread;
+- Rank IC.
+
+An auditable FF49 SIC-definition file is stored in docs/reference.
+
+New files:
+- `src/industry_neutral.py`
+- `notebooks/10_industry_neutral_momentum.ipynb`
+- `docs/reference/Siccodes49.txt`
