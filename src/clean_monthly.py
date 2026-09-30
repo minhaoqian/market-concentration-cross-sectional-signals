@@ -178,6 +178,40 @@ def _assert_clean_panel(df: pd.DataFrame) -> None:
 
 
 
+
+def build_market_state_panel(raw_path: str | Path) -> pd.DataFrame:
+    """Build the broad monthly universe used to measure market concentration.
+
+    Market concentration is a *market-state* variable and therefore should not
+    depend on the investability screens used for the momentum portfolio.
+
+    Applied:
+    - exact-row deduplication;
+    - validation of the WRDS CIZ US-common-stock query;
+    - primary exchange filter N/A/Q;
+    - valid positive market capitalisation.
+
+    Deliberately NOT applied:
+    - NYSE 20th-percentile size breakpoint;
+    - $5 price screen.
+
+    The returned panel remains security-level (PERMNO). Company-level PERMCO
+    aggregation is performed later inside src/concentration.py.
+    """
+    raw = _read_raw(raw_path)
+    _assert_common_stock_query(raw)
+    deduped, _ = _deduplicate_exact_rows(raw)
+    exchange = _apply_exchange_filter(deduped)
+    state = _apply_market_cap_requirement(exchange, True)
+
+    if state.duplicated(KEY).any():
+        raise AssertionError(
+            "Market-state panel is not unique on PERMNO + MthCalDt."
+        )
+
+    return state.sort_values(KEY).reset_index(drop=True)
+
+
 def build_monthly_history_panel(raw_path: str | Path) -> pd.DataFrame:
     """Build the security-level monthly history used for signal lookbacks/outcomes.
 
