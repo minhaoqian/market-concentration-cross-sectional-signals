@@ -656,3 +656,50 @@ TotalChange = DirectWeightEffect + ReRankingEffect
 HAC6 is primary and HAC12 is robustness for each component mean.
 
 Additional diagnostics report top-10 formation-weight share and realised-return contribution inside the baseline Q1 and Q5 legs.
+
+
+---
+
+## Industry-neutral momentum test
+
+This stage is fixed before results are inspected.
+
+### Primary industry definition
+
+Fama-French 49 industries, mapped from contemporaneous CRSP `SICCD`.
+
+The repository stores an auditable copy of the published SIC-range definition file at:
+
+`docs/reference/Siccodes49.txt`
+
+### Primary neutral signal
+
+For stock i in industry g at formation month t:
+
+```text
+IndustryMeanMomentum(g,t) = equal-weight mean of raw 12-2 momentum in industry g
+IndustryNeutralMomentum(i,t) = RawMomentum(i,t) - IndustryMeanMomentum(g,t)
+```
+
+Industry-months require at least 10 valid momentum observations.
+
+Global Q1-Q5 portfolios are then re-formed using the adjusted signal.
+
+### Primary estimand
+
+```text
+Delta_t = VW_Spread_IndustryNeutral_t - VW_Spread_Raw_t
+```
+
+Inference:
+- HAC6 primary;
+- HAC12 robustness.
+
+### Pre-specified robustness
+
+- within-industry percentile-rank signal;
+- CRSP ICBIndustry broad classification;
+- equal-weighted spread;
+- Rank IC.
+
+Mega-cap exclusion is not combined with industry neutralisation at this stage.
