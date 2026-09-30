@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="520" viewBox="0 0 900 520">
+<style>
+text{font-family:Arial,sans-serif;fill:#222}.title{font-size:24px;font-weight:600}.axis{font-size:14px}.label{font-size:15px}.value{font-size:14px;font-weight:600}.grid{stroke:#ddd;stroke-width:1}.bar{fill:#4C78A8}.err{stroke:#222;stroke-width:2}
+</style>
+<rect width="100%" height="100%" fill="white"/>
+<text x="450" y="38" text-anchor="middle" class="title">Top-10 Exclusion: Direct-Weight vs Re-Ranking Decomposition</text>
+<line x1="95" y1="400" x2="850" y2="400" stroke="#333"/>
+<line x1="95" y1="70" x2="95" y2="440" stroke="#333"/>
+<line x1="95" y1="318" x2="850" y2="318" class="grid"/><text x="78" y="323" text-anchor="end" class="axis">0.05</text>
+<line x1="95" y1="236" x2="850" y2="236" class="grid"/><text x="78" y="241" text-anchor="end" class="axis">0.10</text>
+<line x1="95" y1="154" x2="850" y2="154" class="grid"/><text x="78" y="159" text-anchor="end" class="axis">0.15</text>
+<text x="25" y="255" transform="rotate(-90 25 255)" text-anchor="middle" class="axis">Effect on Q5-Q1 return (percentage points / month)</text>
+<rect x="165" y="217" width="150" height="183" class="bar"/><text x="240" y="205" text-anchor="middle" class="value">+0.1114 pp</text>
+<line x1="240" y1="72" x2="240" y2="434" class="err"/><line x1="225" y1="72" x2="255" y2="72" class="err"/><line x1="225" y1="434" x2="255" y2="434" class="err"/>
+<rect x="380" y="400" width="150" height="3" class="bar"/><text x="455" y="425" text-anchor="middle" class="value">-0.0016 pp</text>
+<line x1="455" y1="365" x2="455" y2="435" class="err"/><line x1="440" y1="365" x2="470" y2="365" class="err"/><line x1="440" y1="435" x2="470" y2="435" class="err"/>
+<rect x="595" y="219" width="150" height="181" class="bar"/><text x="670" y="207" text-anchor="middle" class="value">+0.1099 pp</text>
+<line x1="670" y1="72" x2="670" y2="436" class="err"/><line x1="655" y1="72" x2="685" y2="72" class="err"/><line x1="655" y1="436" x2="685" y2="436" class="err"/>
+<text x="240" y="468" text-anchor="middle" class="label">Direct weight</text><text x="455" y="468" text-anchor="middle" class="label">Re-ranking</text><text x="670" y="468" text-anchor="middle" class="label">Total change</text>
+<text x="450" y="505" text-anchor="middle" class="axis">Bars show monthly means; error bars are approximate HAC6 95% confidence intervals.</text>
+</svg>
