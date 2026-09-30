@@ -1,144 +1,64 @@
-# Does Market Concentration Distort Cross-Sectional Equity Signals?
+# Market Concentration and Cross-Sectional Equity Signals
 
 ## Project Overview
 
-This repository contains an empirical quantitative-finance research project on whether rising US equity-market concentration distorts the measured performance of cross-sectional momentum strategies.
+This repository contains an empirical quantitative-finance study of how rising US equity-market concentration affects the measured performance and exposure structure of a cross-sectional momentum strategy.
 
-The first research version deliberately focuses on **12-2 price momentum** rather than testing many signals at once. The objective is to distinguish several possible mechanisms:
+The project separates three questions:
 
-1. aggregate market concentration;
-2. mega-cap portfolio-weight concentration;
-3. industry common-trend exposure;
-4. market-beta exposure.
+1. Does aggregate market concentration predict momentum performance?
+2. Do mega-cap weights distort value-weighted momentum portfolios?
+3. Do industry and market-beta neutralisation materially change the signal?
 
-The project is built as a reproducible research workflow rather than a single backtest.
+## Research Question
 
-## Main Research Question
+Does market concentration distort cross-sectional equity signals through changes in ranking ability, or mainly through portfolio weights and common exposures?
 
-> **Does market concentration distort the measured performance of cross-sectional momentum, and if so, is the effect driven by signal ranking or by portfolio implementation?**
+The current empirical version studies 12-2 momentum in depth.
 
-## Data
+## Main Findings
 
-Primary data come from CRSP through WRDS:
+- Baseline momentum is positive but weak: the value-weighted Q5-Q1 spread is about 0.075% per month and the equal-weighted spread about 0.246% per month.
+- Aggregate Top-10 market share and HHI do not robustly predict momentum performance.
+- Excluding the Top 10 companies raises the value-weighted momentum spread by roughly 0.110% per month in point estimates.
+- A fixed-rank decomposition shows that almost all of this change is a direct portfolio-weight effect, not a re-ranking effect.
+- Fama-French 49 industry neutralisation leaves Rank IC essentially unchanged and does not improve momentum performance.
+- Ex-ante market-beta neutralisation lowers the value-weighted return point estimate and materially reduces realised market exposure, but the return change is statistically imprecise.
 
-- monthly US common-equity data, 2000-2025;
-- daily stock returns, 1998-2025;
-- CRSP value-weighted daily market return;
-- Kenneth French daily risk-free rate.
+Across the project, economically meaningful point estimates are often accompanied by wide confidence intervals. Conclusions are therefore framed around the structure of the evidence rather than significance hunting.
 
-Licensed raw WRDS data are **not** uploaded to this public repository.
+See docs/empirical_synthesis.md for the integrated interpretation.
 
-## Primary Sample
+## Data and Sample
 
-At monthly formation date t:
+The primary monthly sample spans 2000-2025 and uses CRSP Stock Version 2 (CIZ) through WRDS.
 
-- US common equities on NYSE / AMEX / NASDAQ;
-- positive market capitalisation;
-- exclude stocks below the monthly NYSE 20th percentile of market capitalisation;
-- require month-end price >= $5;
-- form portfolios at t and measure realised return in t+1.
+The investable universe applies US common-equity filters using CIZ classification fields, NYSE/NYSE American/NASDAQ listings, positive market capitalisation, a monthly NYSE 20th-percentile market-cap screen, and a $5 price screen.
 
-Momentum is defined as cumulative return from t-12 through t-2.
+Market concentration is measured on a broader market-state universe and aggregated to the PERMCO/company level before Top-N shares and HHI are computed.
 
-A broader market-state universe is used for market-concentration measurement so that concentration itself is not mechanically conditioned on the stricter signal-investment screens.
+Raw licensed WRDS data are intentionally excluded from the public repository.
 
-## Research Design
+## Signal
 
-### Baseline momentum
-- 12-2 momentum;
-- monthly Spearman Rank IC;
-- value-weighted quintiles, Q5-Q1;
-- equal-weighted robustness;
-- Newey-West HAC lag 6 primary, lag 12 robustness.
+Primary signal: 12-2 momentum. At month-end t, total returns from t-12 through t-2 are compounded, t-1 is skipped, contiguous monthly history is required, quintiles are formed at t, and the portfolio is held during t+1.
 
-### Aggregate concentration
-Company-level concentration is constructed after aggregating multiple share classes to PERMCO:
-- Top-5 share;
-- Top-10 share;
-- HHI;
-- effective number of firms.
+Primary portfolios are value weighted. Equal-weighted portfolios and monthly Spearman Rank IC are used as robustness and diagnostic measures.
 
-Primary test:
-- momentum spread on contemporaneous Top-10 market share, with holding return realised in t+1.
+## Neutralisation and Exposure Tests
 
-### Mega-cap mechanism
-- exclude top 5 / 10 / 20 companies by market capitalisation;
-- distinguish total change from:
-  - direct portfolio-weight effect;
-  - re-ranking effect.
+The current analysis includes broad market-concentration conditioning, timing robustness, Top-5/Top-10/Top-20 mega-cap exclusion, fixed-rank weight-vs-reranking decomposition, Fama-French 49 industry neutralisation, ICB-industry robustness, rolling daily CAPM beta estimation, ex-ante market-beta hedge overlay, long/short beta-rescaling robustness, and ex-post realised market-beta diagnostics.
 
-### Industry neutralisation
-Primary:
-- Fama-French 49 industry mapping from contemporaneous SIC;
-- demean raw momentum within industry-month before re-forming global quintiles.
+## Inference
 
-Robustness:
-- within-industry percentile rank;
-- CRSP ICB industry neutralisation.
-
-### Market-beta neutralisation
-Ex-ante CAPM beta:
-- CRSP daily stock excess returns;
-- CRSP value-weighted market excess return;
-- 252 market trading-day window;
-- skip the 5 trading days immediately before formation;
-- minimum 126 paired observations;
-- no beta winsorisation or imputation.
-
-Primary construction:
-- preserve original momentum holdings and within-leg value weights;
-- hedge the portfolio's estimated net market beta with a market overlay.
-
-## Main Findings So Far
-
-The empirical evidence points toward a portfolio-implementation mechanism rather than a breakdown in momentum ranking ability.
-
-- Baseline value-weighted momentum is positive but weak and statistically imprecise.
-- Aggregate market concentration does not show a robust linear relationship with subsequent momentum performance.
-- Removing mega-cap firms raises the value-weighted momentum spread in point estimates, while equal-weighted performance and Rank IC change very little.
-- A decomposition shows that almost all of the mega-cap exclusion effect comes from **direct portfolio weights**, not re-ranking.
-- Industry neutralisation leaves Rank IC almost unchanged and does not improve momentum performance.
-- Beta neutralisation reduces realised market exposure and lowers the momentum spread in point estimates, but the return effect remains statistically imprecise.
-
-The current interpretation is therefore:
-
-> rising market concentration appears more relevant to how a value-weighted momentum portfolio is implemented than to whether the underlying cross-sectional ranking contains information.
-
-This conclusion remains subject to final synthesis, figure production, and reporting of limitations.
-
-## Repository Structure
-
-```text
-docs/        Research design, sample construction, methodology logs, synthesis
-notebooks/   Sequential empirical analysis
-src/         Reusable Python research code
-data/        Local-only raw/interim/processed data
-paper/       Final research note / report
-```
+The inference convention was locked before the relevant results were examined: Newey-West/HAC lag 6 primary, lag 12 robustness, two-sided tests, and 95% confidence intervals.
 
 ## Current Status
 
-Core empirical analysis is approximately **75-80% complete**.
+Empirical analysis is substantially complete. Core data engineering, concentration measurement, momentum construction, baseline inference, mega-cap decomposition, industry neutralisation, and beta-neutralisation have all been implemented and validated.
 
-Completed:
-- monthly sample construction;
-- concentration measures;
-- momentum signal validation;
-- baseline portfolio and inference;
-- concentration conditioning;
-- timing robustness;
-- mega-cap exclusion and decomposition;
-- industry neutralisation;
-- daily beta data audit;
-- rolling beta estimation;
-- primary beta-neutral momentum analysis.
-
-Remaining:
-- final synthesis;
-- a small set of final robustness checks only if economically justified;
-- publication-quality tables and figures;
-- final README / research note / CV and interview summary.
+Remaining work is primarily final result tables and figures, a concise robustness summary, transaction-cost / implementation discussion, the final research note or paper, and CV/interview packaging.
 
 ## Reproducibility
 
-Every final result should be traceable from licensed source data through documented transformations and code. Methodology changes are recorded in `docs/research_log.md` to reduce hindsight bias and specification search.
+Methodological revisions and data issues are recorded in docs/research_log.md. Raw CRSP files are not committed, but the code documents the transformations required for authorised users to reproduce the analysis with their own WRDS access.
