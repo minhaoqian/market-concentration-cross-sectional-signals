@@ -570,3 +570,24 @@ A weak, insignificant, or economically unattractive result is **not** a valid re
 10. freeze this plan as Version 1.0.
 
 Only after these steps should the main empirical results be generated.
+
+---
+
+## Concentration-conditioning hierarchy
+
+Primary hypothesis test:
+- outcome: value-weighted 12–2 momentum Q5 minus Q1 next-month return;
+- concentration: company-level Top-10 market-cap share from the broad market-state universe at formation month-end t;
+- model: VW momentum spread on Top10Share;
+- Top10Share coefficient reported per 10 percentage points;
+- two-sided HAC6 inference;
+- HAC12 robustness.
+
+Pre-specified robustness / secondary analyses:
+- linear time trend;
+- HHI;
+- equal-weighted spread;
+- monthly Rank IC;
+- Low/Medium/High concentration states using expanding historical tertiles.
+
+Regime thresholds at month t use only concentration observations through t-1 and require at least 60 months of prior history.
