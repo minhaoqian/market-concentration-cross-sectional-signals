@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="430" viewBox="0 0 900 430">
+<style>text{font-family:Arial,sans-serif;fill:#222}.title{font-size:24px;font-weight:600}.axis{font-size:14px}.lab{font-size:17px}.ci{stroke:#4C78A8;stroke-width:4}.dot{fill:#4C78A8}.zero{stroke:#333;stroke-width:1.5}.grid{stroke:#ddd;stroke-width:1}</style>
+<rect width="100%" height="100%" fill="white"/>
+<text x="450" y="38" text-anchor="middle" class="title">Concentration-to-Portfolio-Weight Bridge</text>
+<line x1="170" y1="320" x2="840" y2="320" stroke="#333"/>
+<line x1="200" y1="75" x2="200" y2="335" class="zero"/>
+<text x="130" y="135" text-anchor="end" class="lab">Primary</text>
+<text x="130" y="245" text-anchor="end" class="lab">With linear trend</text>
+<!-- scale: 0pp at x200, 35pp at x820 -->
+<line x1="505" y1="130" x2="762" y2="130" class="ci"/><circle cx="634" cy="130" r="8" class="dot"/>
+<line x1="239" y1="240" x2="513" y2="240" class="ci"/><circle cx="376" cy="240" r="8" class="dot"/>
+<text x="634" y="105" text-anchor="middle" class="axis">24.48 pp [17.21, 31.75]</text>
+<text x="376" y="215" text-anchor="middle" class="axis">9.93 pp [2.18, 17.68]</text>
+<text x="200" y="345" text-anchor="middle" class="axis">0</text><text x="377" y="345" text-anchor="middle" class="axis">10</text><text x="554" y="345" text-anchor="middle" class="axis">20</text><text x="731" y="345" text-anchor="middle" class="axis">30</text>
+<text x="500" y="395" text-anchor="middle" class="axis">Q5-Q1 Top-10 weight-gap change per +10pp aggregate Top-10 market share (percentage points)</text>
+</svg>
