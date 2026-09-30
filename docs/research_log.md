@@ -298,3 +298,34 @@ Created the first reproducible Python implementation of the monthly data pipelin
 ### Research discipline
 
 The notebook is an audit / validation notebook. It does not yet estimate factor returns or test the main hypothesis.
+
+
+---
+
+## 30 September 2026 — Concentration sanity check and PERMCO revision
+
+### Sanity checks passed
+
+Selected year-end concentration estimates were economically plausible and internally consistent. Historical top-company tables also showed sensible point-in-time composition.
+
+### Multi-class share issue discovered
+
+The security-level Top-10 list contained both GOOG and GOOGL in the same month.
+
+These are separate listed share classes of Alphabet Inc. They have separate PERMNO values and different voting rights, but belong to the same economic issuer.
+
+For market-concentration measurement, treating them as separate firms would split Alphabet's economic size across two securities.
+
+### Primary definition revised before hypothesis testing
+
+Primary market concentration is now measured at the PERMCO/company level:
+
+1. aggregate MthCap across all PERMNO share classes belonging to the same PERMCO;
+2. calculate company market weights;
+3. compute Top-5 share, Top-10 share, and HHI from those company weights.
+
+Security-level PERMNO concentration is retained as a robustness measure.
+
+Signal construction remains at the PERMNO level.
+
+This revision occurred before momentum construction and before any concentration-signal relationship was estimated.
