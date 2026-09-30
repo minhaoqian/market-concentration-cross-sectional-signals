@@ -399,3 +399,28 @@ The notebook computes:
 Formal HAC/Newey-West t-statistics remain deferred until the lag convention is frozen.
 
 No concentration-conditioning result has yet been estimated.
+
+
+---
+
+## 30 September 2026 — HAC inference convention locked
+
+Before any concentration-conditioned momentum test, the project fixed the time-series inference convention:
+
+- **Primary:** Newey–West / HAC maximum lag = 6 months
+- **Robustness:** Newey–West / HAC maximum lag = 12 months
+
+The lag choice will not be changed in response to whether a coefficient or mean crosses a conventional significance threshold.
+
+New files:
+
+- `src/inference.py`
+- `notebooks/04_momentum_inference.ipynb`
+
+The notebook applies the convention to:
+
+- mean monthly Rank IC;
+- value-weighted Q5 minus Q1 momentum spread;
+- equal-weighted Q5 minus Q1 robustness spread.
+
+No concentration-conditioned inference has yet been run.
