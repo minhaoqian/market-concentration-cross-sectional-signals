@@ -706,3 +706,43 @@ because concentration is persistent and strongly trending.
 
 No HHI, alternative Top-N threshold, nonlinear transformation, sample split,
 or lag search is added in this bridge stage.
+
+
+---
+
+## 30 September 2026 — Concentration mechanism bridge results
+
+The pre-specified bridge tests distinguish a portfolio-exposure mechanism from
+a realised-return effect.
+
+Direct-weight effect:
+- coefficient per +10pp Top10Share: +0.001840 per month;
+- HAC6 t = 0.772, p = 0.440, 95% CI [-0.002831, 0.006510];
+- HAC12 p = 0.316;
+- with linear trend, coefficient = +0.002748, p = 0.283.
+
+Thus aggregate concentration does not precisely predict the realised monthly
+direct-weight return effect.
+
+Top-10 weight gap (Q5 minus Q1):
+- coefficient per +10pp Top10Share: +0.244777;
+- HAC6 t = 6.599, p < 1e-10;
+- 95% CI [0.172071, 0.317483];
+- HAC12 result is essentially unchanged;
+- with linear time trend, coefficient remains positive at +0.099303,
+  t = 2.512, p = 0.012, 95% CI [0.021837, 0.176770].
+
+Interpretation: higher aggregate concentration is strongly associated with a
+larger mega-cap formation-weight imbalance between the winner and loser legs,
+even after a linear time trend. However, the realised direct-weight return
+effect remains noisy and is not precisely increasing with concentration.
+The final paper should distinguish these two statements.
+
+## External benchmark validation locked
+
+Before observing the comparison, the project will validate its realised
+momentum series against the Kenneth French US monthly Momentum Factor (Mom).
+The project spread is aligned by holding month (formation t -> realised t+1).
+Because the portfolio constructions differ, the primary validation criterion is
+economically meaningful positive co-movement, not equality of means or a
+one-for-one factor beta.
