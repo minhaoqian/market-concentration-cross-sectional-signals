@@ -684,3 +684,25 @@ Key findings:
 No further beta specification is added. This avoids post-result specification search.
 
 The project now moves to final synthesis, figures/tables, and research-paper packaging.
+
+---
+
+## 30 September 2026 — Final-review bridge test locked before results
+
+A professor-style final review identified one remaining identification gap:
+the mega-cap decomposition establishes a direct portfolio-weight mechanism,
+but does not by itself show that the mechanism becomes stronger when aggregate
+market concentration is higher.
+
+Before observing bridge-test results, the following specifications are frozen:
+
+1. DirectWeightEffect_t = alpha + beta * Top10Share_t + error_t
+2. (Top10Weight_Q5,t - Top10Weight_Q1,t)
+   = alpha + gamma * Top10Share_t + error_t
+
+Top10Share is scaled per +10 percentage points. HAC6 is primary and HAC12 is
+robustness. A linear time trend with HAC6 is reported as secondary robustness
+because concentration is persistent and strongly trending.
+
+No HHI, alternative Top-N threshold, nonlinear transformation, sample split,
+or lag search is added in this bridge stage.
