@@ -345,3 +345,54 @@ This test supports the production approach above but does not constitute an empi
 8. sector classification used for neutralisation.
 
 Once these are resolved, this document will be promoted to Version 1.0 before the main results are produced.
+
+
+---
+
+# 17. Company-Level Concentration Definition
+
+## Primary unit for concentration: PERMCO
+
+The project measures market concentration primarily at the **economic company level**, using CRSP `PERMCO`, rather than treating every listed security (`PERMNO`) as a separate firm.
+
+For company j in month t:
+
+```text
+CompanyMarketCap(j,t) = sum of MthCap(i,t) across all PERMNO i linked to PERMCO j
+```
+
+Company market weights are then:
+
+```text
+w(j,t) = CompanyMarketCap(j,t) / sum_k CompanyMarketCap(k,t)
+```
+
+Primary concentration measures are:
+
+```text
+Top10Share(t) = sum of the 10 largest company weights
+HHI(t) = sum_j w(j,t)^2
+```
+
+## Why aggregation is necessary
+
+A single economic company can have more than one publicly traded share class.
+
+Alphabet is the clearest example in the current sample:
+
+- `GOOGL` is Alphabet Class A common stock;
+- `GOOG` is Alphabet Class C capital stock.
+
+They are separate listed securities and therefore have separate CRSP PERMNO values. Their governance rights differ: Alphabet states that Class A shares carry one vote per share, while Class C shares have no voting power on stockholder matters. Both, however, are equity claims on the same economic issuer, Alphabet Inc.
+
+If GOOG and GOOGL were treated as two separate "firms" when calculating Top-10 concentration or HHI, Alphabet's economic size would be artificially split across two securities. The project therefore aggregates all listed share classes belonging to the same PERMCO before measuring market concentration.
+
+This aggregation applies generally, not only to Alphabet.
+
+## Important distinction
+
+- **Signal construction and stock returns:** remain at the PERMNO/security level.
+- **Market concentration:** primary measure is at the PERMCO/company level.
+- **Robustness:** the earlier PERMNO/security-level concentration measure is retained as a secondary specification.
+
+This revision was made during pre-analysis sanity checking, before the project examined any relationship between concentration and signal performance.
