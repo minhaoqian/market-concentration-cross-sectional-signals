@@ -511,3 +511,22 @@ Calendar-month lagging is used rather than exact-date subtraction because CRSP m
 New notebook:
 
 - `notebooks/07_concentration_timing_robustness.ipynb`
+
+
+---
+
+## 30 September 2026 — Mega-cap exclusion methodology locked
+
+Before testing composition effects, the project fixes:
+
+- primary exclusion = top 10 PERMCO companies by broad-market market cap at formation month t;
+- robustness = top 5 and top 20;
+- all share classes of an excluded company are removed;
+- momentum signal definition is unchanged;
+- quintiles are re-formed after exclusion;
+- primary estimand = ExTop10 VW Q5-Q1 minus baseline VW Q5-Q1;
+- HAC6 primary / HAC12 robustness.
+
+New files:
+- `src/mega_cap.py`
+- `notebooks/08_mega_cap_exclusion.ipynb`
