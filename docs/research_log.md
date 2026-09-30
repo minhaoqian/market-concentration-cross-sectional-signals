@@ -530,3 +530,24 @@ Before testing composition effects, the project fixes:
 New files:
 - `src/mega_cap.py`
 - `notebooks/08_mega_cap_exclusion.ipynb`
+
+
+---
+
+## 30 September 2026 — Mega-cap mechanism decomposition locked
+
+Before moving to sector or beta neutralisation, the project separates:
+
+1. direct value-weight effect with baseline quintile membership held fixed;
+2. re-ranking effect from rebuilding quintiles after mega-cap exclusion.
+
+Primary exclusion remains top 10 PERMCO companies.
+
+The decomposition is exactly additive:
+TotalChange = DirectWeightEffect + ReRankingEffect.
+
+Additional diagnostics measure mega-cap weight shares and return contributions inside baseline Q1 and Q5.
+
+New files:
+- `src/mega_cap_decomposition.py`
+- `notebooks/09_mega_cap_decomposition.ipynb`
