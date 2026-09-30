@@ -424,3 +424,37 @@ The notebook applies the convention to:
 - equal-weighted Q5 minus Q1 robustness spread.
 
 No concentration-conditioned inference has yet been run.
+
+
+---
+
+## 30 September 2026 — Methodology gate before concentration conditioning
+
+A pre-conditioning review identified that market concentration and momentum portfolio eligibility should not use the same denominator universe.
+
+### Revision
+
+Primary concentration will be measured from a broad market-state universe:
+
+- CIZ US ordinary common equities;
+- N/A/Q exchanges;
+- positive market capitalisation;
+- company-level PERMCO aggregation;
+- no $5 screen;
+- no NYSE 20% size screen.
+
+The stricter $5 and NYSE-size screens remain limited to the momentum formation universe.
+
+### Timing locked
+
+At month-end t:
+
+- concentration is observed at t;
+- momentum formation and eligibility are determined at t;
+- performance is measured in t+1.
+
+New validation notebook:
+
+- `notebooks/05_market_state_concentration.ipynb`
+
+No concentration-conditioned performance test has been run yet.
