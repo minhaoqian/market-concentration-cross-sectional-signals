@@ -56,7 +56,30 @@ def read_daily_market(path: str | Path) -> pd.DataFrame:
 
 
 def read_fama_french_daily_rf(path: str | Path) -> pd.DataFrame:
-    raw = pd.read_csv(path)
+    """Read Kenneth French daily factors and return RF in decimal units.
+
+    Kenneth French CSV downloads include explanatory text before the actual
+    comma-separated header, so the header row must be detected explicitly.
+    """
+    path = Path(path)
+
+    with path.open("r", encoding="utf-8-sig", errors="replace") as fh:
+        lines = fh.readlines()
+
+    header_row = None
+    for i, line in enumerate(lines):
+        fields = [x.strip() for x in line.strip().split(",")]
+        if "Mkt-RF" in fields and "RF" in fields:
+            header_row = i
+            break
+
+    if header_row is None:
+        raise ValueError(
+            "Could not locate the Fama-French daily factor header "
+            "(expected columns including Mkt-RF and RF)."
+        )
+
+    raw = pd.read_csv(path, skiprows=header_row)
 
     if "RF" not in raw.columns:
         raise ValueError("RF column not found in Fama-French daily file.")
@@ -74,13 +97,13 @@ def read_fama_french_daily_rf(path: str | Path) -> pd.DataFrame:
         errors="raise",
     )
 
+    # Kenneth French factor returns are reported in percent.
     out["RF"] = pd.to_numeric(out["RF"], errors="coerce") / 100.0
 
     if out["Date"].duplicated().any():
         raise ValueError("Fama-French RF series has duplicate dates.")
 
     return out.sort_values("Date").reset_index(drop=True)
-
 
 def audit_daily_stock(df: pd.DataFrame) -> pd.Series:
     duplicated_key_rows = int(
