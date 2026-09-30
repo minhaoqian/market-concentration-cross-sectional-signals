@@ -362,3 +362,40 @@ Formation eligibility remains determined by the clean panel at month t.
 - `notebooks/02_momentum_signal.ipynb`
 
 The momentum notebook stops at construction and sanity checks. No concentration-conditioning test has yet been run.
+
+
+---
+
+## 30 September 2026 — Momentum signal validated v1 and baseline scaffold
+
+### Manual validation passed
+
+For MARA (PERMNO 14813) at the 2021-05 formation date, the 12–2 momentum signal was manually recomputed from the CRSP monthly returns for 2020-05 through 2021-03.
+
+Manual compounded return:
+
+`105.71119104164512`
+
+This matches the programmatic signal to floating-point precision.
+
+The check also confirmed that CRSP monthly dates are last trading dates rather than necessarily calendar month-ends; month selection for validation should therefore use calendar periods rather than hard-coded month-end dates.
+
+### Baseline evaluation added
+
+New files:
+
+- `src/portfolio.py`
+- `notebooks/03_momentum_baseline.ipynb`
+
+The notebook computes:
+
+- monthly Spearman Rank IC;
+- value-weighted Q1–Q5 returns;
+- value-weighted Q5 minus Q1 spread;
+- equal-weighted robustness returns;
+- next-month return coverage diagnostics;
+- descriptive summary statistics.
+
+Formal HAC/Newey-West t-statistics remain deferred until the lag convention is frozen.
+
+No concentration-conditioning result has yet been estimated.
