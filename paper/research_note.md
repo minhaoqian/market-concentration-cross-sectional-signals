@@ -1,676 +1,528 @@
-# Does Market Concentration Distort Cross-Sectional Equity Signals?
-## Momentum, Mega-Cap Exposure, and Portfolio Implementation in US Equities, 2000–2025
+# Does Market Concentration Distort Cross-Sectional Momentum?
 
-### Abstract
+## Mega-Cap Exposure and Portfolio Implementation in US Equities, 2000-2025
 
-This paper studies whether rising concentration in the US equity market distorts the measured performance of cross-sectional momentum strategies, and whether any distortion reflects deterioration in signal quality or changes in portfolio implementation. Using CRSP monthly US common-equity data from 2000 through 2025, the analysis constructs a standard 12–2 momentum signal, evaluates value-weighted and equal-weighted quintile portfolios, measures market concentration at the company level, and then applies a sequence of mechanism tests involving mega-cap exclusion, industry neutralisation, and market-beta neutralisation.
-
-The unconditional momentum signal is weak in this sample. Mean monthly Rank IC is 0.00768, while the value-weighted Q5–Q1 spread averages 0.0746% per month and is statistically indistinguishable from zero under the pre-specified Newey-West inference rule. Aggregate market concentration, measured by Top-10 market-cap share or HHI, does not robustly predict subsequent momentum performance. By contrast, excluding the ten largest companies raises the value-weighted momentum spread by approximately 0.110 percentage points per month. A decomposition shows that essentially the entire effect is due to direct portfolio weights rather than re-ranking: the direct weight effect is +0.111 percentage points per month, while the re-ranking effect is approximately zero.
-
-Industry neutralisation leaves Rank IC almost unchanged, and market-beta neutralisation materially reduces realised market exposure but does not reveal a statistically robust hidden momentum premium. The combined evidence therefore points toward a portfolio-implementation channel: rising market concentration matters more for how a value-weighted cross-sectional strategy is implemented than for whether the underlying momentum ranking contains information.
+**Author:** Minhao Qian  
+**Programme:** MSc Mathematical & Computational Finance, University of Oxford  
+**Status:** Final research version, October 2026
 
 ---
 
-## 1. Introduction
+## Abstract
 
-US equity-market concentration has increased substantially in recent years. A relatively small number of very large companies now account for an unusually large fraction of total listed-market capitalisation. This change raises an important question for quantitative equity research: when the market becomes more concentrated, do traditional cross-sectional signals become less informative, or do their realised portfolio returns simply become more sensitive to a handful of dominant firms?
+This paper studies whether rising concentration in the US equity market distorts the measured performance of cross-sectional momentum, and whether any distortion reflects weaker stock-ranking information or changes in portfolio implementation. Using CRSP monthly US common-equity data from 2000 through 2025, the analysis constructs a 12-2 momentum signal, evaluates value-weighted and equal-weighted quintile portfolios, measures concentration at the company level, and applies a sequence of mechanism tests involving mega-cap exclusion, industry neutralisation, market-beta neutralisation, and an external benchmark validation against the Kenneth French Momentum Factor.
 
-That distinction matters. A cross-sectional signal can remain informative at the security-ranking level while a value-weighted implementation becomes economically dominated by a small number of mega-cap companies. In that case, weaker realised long-short returns need not indicate that the underlying signal has disappeared. Instead, the mapping from signal ranks to portfolio weights may have changed.
+The unconditional momentum signal is weak in this sample. Mean monthly Rank IC is 0.00768, the value-weighted Q5-Q1 spread averages 0.0746% per month, and the equal-weighted spread averages 0.2457% per month; none is statistically distinguishable from zero under the pre-specified Newey-West inference rule. Aggregate Top-10 market-cap concentration does not robustly predict subsequent momentum returns. By contrast, excluding the ten largest companies raises the value-weighted momentum spread by approximately 0.110 percentage points per month. An exact decomposition localises essentially the entire observed point estimate to direct portfolio weights rather than re-ranking: the direct-weight component is +0.1114 percentage points per month, whereas the re-ranking component is approximately zero.
 
-This project focuses on momentum because it provides a clean setting in which to separate these channels. The central question is:
+A final bridge test strengthens the economic interpretation. Higher aggregate Top-10 concentration is strongly associated with a larger Top-10 weight imbalance between the winner and loser legs: a 10-percentage-point increase in aggregate Top-10 share is associated with a 24.5-percentage-point larger Q5-minus-Q1 mega-cap weight gap under the primary specification, and the relation remains positive after a linear time trend. However, the realised direct-weight return effect remains noisy and is not itself precisely increasing with concentration. Industry neutralisation leaves Rank IC almost unchanged, while ex-ante beta hedging materially reduces realised market beta without revealing a statistically robust hidden momentum premium.
 
-> **Does rising US equity-market concentration distort the measured performance of cross-sectional momentum, and if so, is the effect driven by signal ranking or by portfolio implementation?**
-
-The empirical design deliberately distinguishes three layers.
-
-First, **signal quality** is measured using cross-sectional Rank IC and quintile ordering. If market concentration genuinely destroys momentum information, one would expect the relation between past-return ranks and future-return ranks to deteriorate.
-
-Second, **portfolio implementation** is studied through value-weighted versus equal-weighted returns and direct mega-cap exclusion. If concentration mainly affects portfolio construction, value-weighted returns should change more than equal-weighted returns or Rank IC.
-
-Third, **systematic exposures** are examined through industry neutralisation and ex-ante market-beta neutralisation. These tests evaluate whether apparent momentum performance is largely an artifact of industry common trends or time-varying market exposure.
-
-The results do not support a simple story in which higher aggregate market concentration systematically destroys momentum. The baseline momentum signal is already weak in this 2000–2025 sample, and aggregate concentration measures do not robustly predict subsequent momentum performance. However, mega-cap exclusion materially changes value-weighted momentum returns while leaving Rank IC and equal-weighted results almost unchanged. A direct decomposition shows that this effect is almost entirely attributable to portfolio weights rather than re-ranking.
-
-The strongest empirical conclusion is therefore not that concentration changes the informational content of momentum, but that concentration changes the economic implementation of a value-weighted momentum portfolio.
+The project's momentum implementation is externally validated against the Kenneth French US Momentum Factor. Over 299 common holding months, the project value-weighted spread has a 0.875 correlation with French Mom and the equal-weighted spread has a 0.917 correlation. The combined evidence therefore points toward a portfolio-implementation channel: concentration changes the economic weights attached to momentum rankings more clearly than it changes the informational content of those rankings.
 
 ---
 
-## 2. Data
+# 1. Introduction
 
-### 2.1 Monthly equity data
+US equity-market concentration has increased sharply in recent years. By the end of 2025, the ten largest US-listed companies account for roughly 37% of aggregate market capitalisation in the broad market-state universe used in this study. This development matters for quantitative equity research because many cross-sectional signals are evaluated through value-weighted portfolios. When a small number of companies become exceptionally large, the realised performance of a signal portfolio can become highly sensitive to those companies even if the underlying ranking rule has not changed.
 
-The primary sample is built from CRSP monthly US equity data obtained through WRDS. The research window is January 2000 through December 2025.
+This distinction motivates the central research question:
 
-The monthly production sample contains:
+> **Does rising market concentration weaken the informational content of cross-sectional momentum, or does it primarily change the implementation of a value-weighted momentum portfolio?**
 
-- 601,350 formation-date observations;
+A cross-sectional signal and a portfolio implementation answer different questions. A signal ranks securities. A weighting rule determines how much economic exposure is attached to each rank. In a dispersed market those layers may appear similar. In a concentrated market they can diverge.
+
+The empirical design therefore separates three channels.
+
+1. **Signal quality.** Monthly Spearman Rank IC and the stability of cross-sectional ordering are used to ask whether past-return rankings continue to contain information about next-month returns.
+2. **Portfolio implementation.** Value-weighted and equal-weighted returns are compared; mega-cap companies are removed; and the exclusion effect is decomposed into a direct-weight component and a re-ranking component.
+3. **Systematic exposure.** Industry-neutral and market-beta-neutral implementations are used to determine whether the raw strategy mainly reflects common industry trends or market exposure rather than cross-sectional momentum.
+
+The paper's contribution is not a claim that concentration causally destroys or creates momentum. The aggregate concentration regressions are statistically weak. The more informative result comes from the portfolio-construction layer. Mega-cap exclusion changes value-weighted momentum returns while leaving ranking diagnostics almost unchanged, and the decomposition shows that virtually all of the observed exclusion point estimate is attributable to direct weights.
+
+A final concentration-mechanism bridge test sharpens this interpretation. Aggregate concentration strongly predicts the **weight imbalance** created by mega-cap firms between the winner and loser portfolios, even after a linear time trend. It does not precisely predict the realised monthly direct-weight return effect. This is economically coherent: concentration determines how much portfolio weight mega-cap firms receive, whereas the return consequence additionally depends on what those firms subsequently earn.
+
+The project also performs two final validation checks. First, the project momentum series co-moves very strongly with the Kenneth French US Momentum Factor despite different portfolio constructions. Second, official CRSP CIZ documentation confirms that the monthly total return field used here compounds daily returns and includes delisting returns when appropriate, so a separate legacy-style DLRET merge is not required.
+
+The resulting conclusion is narrower, and stronger, than a generic factor-decay claim:
+
+> **market concentration appears more relevant to the implementation of value-weighted cross-sectional momentum than to the informational content of the momentum ranking itself.**
+
+---
+
+# 2. Related Literature
+
+## 2.1 Cross-sectional momentum
+
+Jegadeesh and Titman (1993) establish the classic intermediate-horizon momentum result: stocks with strong past returns tend to outperform stocks with weak past returns over subsequent months. The present study follows this broad empirical tradition and uses a pre-specified 12-2 formation rule, skipping the most recent month.
+
+The purpose here is not to re-establish momentum as an anomaly over the full historical CRSP sample. The sample begins in 2000, after the original discovery period, and the primary objective is diagnostic: momentum provides a canonical cross-sectional signal through which to distinguish ranking quality from portfolio implementation.
+
+Daniel and Moskowitz (2016) show that momentum returns can be highly state dependent and can experience large crashes, particularly around market rebounds following stressed states. That literature is relevant to the present sample because weak unconditional momentum need not imply an implementation error or permanent disappearance of the signal. It also motivates the project's separate examination of market-beta exposure.
+
+## 2.2 Industry momentum and neutralisation
+
+Moskowitz and Grinblatt (1999) document a substantial industry component in momentum and show that controlling for industry momentum can reduce individual-stock momentum profitability. This provides the direct motivation for the FF49 industry-neutralisation exercise in this paper.
+
+The empirical question is not whether industry exposure should always be removed. Neutralisation can remove unwanted exposure, but it can also remove economically relevant variation. The appropriate test is therefore comparative: does industry neutralisation improve ranking information or materially change the portfolio result?
+
+## 2.3 Market concentration and portfolio structure
+
+Recent work treats financial-market concentration as an economically meaningful state variable rather than a purely descriptive statistic. Research on market concentration, large-firm valuation, price impact, capital allocation, regulatory constraints, and granular market structure motivates the possibility that a small number of dominant firms can alter portfolio behaviour even without becoming standalone return predictors.
+
+The present study takes a deliberately narrower empirical approach. Concentration is used both as a market-state variable and as a portfolio-composition mechanism. The goal is to determine whether concentration changes the information in momentum ranks, the economic weights assigned to those ranks, or both.
+
+## 2.4 Beta and factor implementation
+
+Factor portfolios can inherit unintended systematic exposures. Frazzini and Pedersen (2014), among others, highlight the economic importance of beta exposure and leverage constraints. In the present setting, market-beta neutralisation is used as an exposure diagnostic rather than as an assumption that a neutral portfolio must be superior.
+
+The paper therefore compares the original momentum spread, a beta-eligible comparator with identical signal membership, and an ex-ante beta-neutral portfolio. This separates sample-coverage effects from the effect of hedging market exposure.
+
+---
+
+# 3. Data and Sample Construction
+
+## 3.1 Monthly CRSP sample
+
+The primary sample uses CRSP monthly US stock data obtained through WRDS and spans January 2000 through December 2025.
+
+The final investable formation panel contains:
+
+- 601,350 security-month observations;
 - 7,423 unique PERMNO securities;
-- 312 formation months.
+- 312 formation months;
+- 544,090 valid 12-2 momentum observations.
 
-The investable sample is restricted to US common equities listed on NYSE, AMEX, or NASDAQ, with positive market capitalisation. At each monthly formation date, stocks below the 20th percentile of NYSE market capitalisation are excluded. A $5 minimum month-end price screen is also imposed.
+The formation universe applies the following rules:
 
-These screens are applied only at the formation date. Historical returns used to construct momentum, and next-month returns used to evaluate portfolio performance, are obtained from a broader monthly history panel so that a stock does not lose valid lookback or outcome data merely because it fails a formation screen in another month.
+- US common equities;
+- NYSE, AMEX, or NASDAQ primary listing;
+- positive formation-month market capitalisation;
+- exclusion of stocks below the monthly NYSE 20th percentile of market capitalisation;
+- month-end price of at least $5.
 
-### 2.2 Market-state universe
+PERMNO is used as the security identifier. PERMCO is used as the economic-company identifier for concentration and mega-cap analysis.
 
-Market concentration is not measured on the stricter signal-investment universe. Instead, a broader market-state universe is used. This universe applies the US common-equity and major-exchange restrictions and requires positive market capitalisation, but it does not apply the $5 price screen or the monthly NYSE 20th-percentile size screen.
+## 3.2 Formation universe versus market-state universe
 
-This distinction is important. If the same investability restrictions were used to measure market concentration, the market-state variable would be mechanically conditioned on the portfolio construction rule. Measuring concentration on a broader state universe reduces this concern.
+The project separates the **signal-investment universe** from the **market-state universe**.
 
-### 2.3 Company-level aggregation
+The investment universe applies the NYSE size screen and the $5 price screen. The broader market-state universe retains the common-equity, major-exchange, and positive-market-cap requirements but omits those stricter investability filters.
 
-Market concentration is measured at the economic-company level rather than the listed-security level. Multiple share classes belonging to the same PERMCO are aggregated before calculating Top-N concentration and HHI.
+This distinction avoids mechanically defining market concentration using the same screens that determine signal eligibility.
 
-This matters for firms such as Alphabet, where GOOG and GOOGL are distinct securities but represent claims on the same economic company. Treating those share classes as separate firms would mechanically overstate the number of large companies and understate true company-level concentration.
+## 3.3 Company-level concentration and multiple share classes
 
-### 2.4 Daily data for beta estimation
+Concentration is measured after aggregating listed share classes to PERMCO.
+
+This matters for companies such as Alphabet, where GOOG and GOOGL are separate listed securities but represent claims on the same economic issuer. Security-level treatment remains appropriate for returns and momentum ranking; company-level aggregation is appropriate for market concentration.
+
+## 3.4 Monthly return treatment and delistings
+
+The analysis uses CRSP CIZ `MthRet` as the monthly total-return field.
+
+CRSP's File Format 2.0 documentation defines `MthRet` as the daily total return compounded for the period and states that it includes delisting returns when appropriate. The CIZ cross-reference guide further explains that the shift to daily-compounded monthly returns also applies to delisting returns.
+
+Accordingly, the study does **not** apply an additional legacy-style merge of a separate DLRET field into `MthRet`. Doing so would risk double-counting delisting information already included in the CIZ monthly return.
+
+## 3.5 Daily beta inputs
 
 Daily beta estimation uses:
 
 - CRSP daily stock total returns;
-- CRSP value-weighted market return including dividends;
+- CRSP value-weighted daily market total return including dividends;
 - Kenneth French daily risk-free rate.
 
-The daily stock extract covers December 1998 through December 2025. The daily market and risk-free series align exactly on 6,813 trading dates.
+The stock history begins in December 1998 to provide sufficient pre-2000 beta history.
 
-The daily stock file initially contains exact duplicate observations. A dedicated audit identifies 16,259 rows belonging to 7,837 duplicated PERMNO-date groups. Every duplicated-key group has identical values across all downloaded fields, including identical daily returns. There are 8,422 redundant rows beyond the first copy and zero conflicting daily-return groups. Exact duplicates are therefore removed before beta estimation.
+The daily stock extract was separately audited. It contained 16,259 rows belonging to 7,837 duplicated PERMNO-date groups. Every such group was an exact full-row duplicate with identical daily return. Retaining one copy removed 8,422 redundant rows and left zero conflicting return groups.
+
+The daily CRSP market series and French risk-free series align exactly on 6,813 trading dates over the research interval.
 
 ---
 
-## 3. Momentum Signal and Portfolio Construction
+# 4. Research Design
 
-### 3.1 Signal definition
+## 4.1 Momentum signal
 
-The primary signal is standard 12–2 momentum:
+At formation month (t), the momentum signal is
 
 [
-MOM_{i,t}
-=
-prod_{s=t-12}^{t-2}(1+R_{i,s})-1.
+MOM_{i,t}=prod_{s=t-12}^{t-2}(1+R_{i,s})-1.
 ]
 
-The construction uses eleven monthly total returns, from month (t-12) through month (t-2), and skips month (t-1).
+The signal uses eleven monthly total returns and skips (t-1).
 
-A signal is accepted only when the relevant monthly history is contiguous in calendar time. This prevents a rolling row window from accidentally spanning missing months.
+Momentum history is constructed on a broader monthly history panel. Formation-date investability screens are applied at (t), not retroactively to every month in the lookback window. Valid momentum requires contiguous calendar-month history.
 
-Across the full sample, 544,090 valid momentum observations are formed.
+## 4.2 Portfolio formation
 
-### 3.2 Portfolio formation
+Each formation month:
 
-At each formation month (t):
-
-1. stocks are ranked by momentum;
+1. eligible securities are ranked by momentum;
 2. five cross-sectional quintiles are formed;
-3. Q5 contains the strongest past winners;
-4. Q1 contains the weakest momentum stocks;
-5. performance is measured using realised return in calendar month (t+1).
+3. Q5 is the winner portfolio;
+4. Q1 is the loser portfolio;
+5. the Q5-Q1 spread is realised in calendar month (t+1).
 
-The primary portfolio is value weighted using formation-month market capitalisation. Equal-weighted portfolios are retained as a robustness comparison.
+The primary implementation is value weighted using formation-month market capitalisation. Equal-weighted returns are retained as an implementation diagnostic.
 
-Missing next-month returns are never replaced with zero. Portfolio returns are computed over stocks with observed next-month returns, with value weights renormalised over the observed-return subset.
+Missing next-month returns are never replaced with zero. Weights are renormalised among securities with observed next-month returns.
 
-### 3.3 Cross-sectional diagnostic
+## 4.3 Rank IC
 
-In addition to portfolio returns, monthly Spearman Rank IC is calculated between momentum and next-month return. Rank IC is useful because it isolates cross-sectional ranking information from portfolio weighting.
+Monthly Spearman Rank IC is computed between the momentum signal at formation and next-month returns.
 
----
+Rank IC is particularly useful for the paper's central question because it measures ranking information without imposing the value-weighting scheme that may itself be distorted by mega-cap concentration.
 
-## 4. Inference
+## 4.4 Inference convention
 
-All primary monthly time-series mean tests use the same pre-specified inference rule:
+Inference rules were frozen before the main concentration and neutralisation results were interpreted:
 
-- Newey-West HAC lag 6 months: primary;
-- Newey-West HAC lag 12 months: robustness;
+- Newey-West HAC lag 6: primary;
+- Newey-West HAC lag 12: robustness;
 - two-sided tests;
 - 95% confidence intervals.
 
-This rule was fixed before the concentration and neutralisation results were examined. The purpose is to reduce the risk of choosing a standard-error specification after seeing which one produces statistical significance.
+The same convention is maintained throughout to reduce specification selection based on significance.
 
 ---
 
-## 5. Baseline Momentum Results
+# 5. Baseline Momentum and External Validation
 
-The average monthly number of investable stocks is 1,927, with a median of 1,843.
+## 5.1 Baseline results
 
-### 5.1 Rank IC
+The investable universe contains an average of approximately 1,927 stocks per month and a median of 1,843.
 
-The mean monthly Rank IC is:
+The mean monthly Rank IC is
 
 [
 0.00768.
 ]
 
-There are 299 months with valid Rank IC.
+Under HAC6:
+
+- t = 0.957;
+- p = 0.339;
+- 95% CI = [-0.0081, 0.0234].
+
+The primary value-weighted Q5-Q1 spread averages
+
+[
+0.0746%	ext{ per month}.
+]
 
 Under HAC6:
 
-- mean: 0.00768;
-- HAC standard error: 0.00803;
-- t-statistic: 0.957;
-- p-value: 0.339;
-- 95% CI: ([-0.00806, 0.02341]).
+- t = 0.227;
+- p = 0.821;
+- 95% CI = [-0.570%, 0.719%] per month.
 
-Under HAC12, the p-value is 0.349.
-
-The point estimate is positive but statistically imprecise.
-
-### 5.2 Value-weighted spread
-
-The value-weighted Q5–Q1 spread averages:
+The equal-weighted spread averages
 
 [
-0.000746
+0.2457%	ext{ per month},
 ]
 
-per month, or approximately:
+with HAC6 p = 0.384.
 
-[
-0.0746%
-]
+The point estimate is substantially larger under equal weighting, but neither implementation is statistically distinguishable from zero.
 
-per month.
+## 5.2 Why the weak baseline requires validation
 
-Under HAC6:
+Because momentum is a well-established empirical phenomenon, a weak 2000-2025 baseline raises an important implementation question. A low sample mean could reflect genuine sample-period behaviour, portfolio-construction differences, or a coding/timing error.
 
-- HAC standard error: 0.00329;
-- t-statistic: 0.227;
-- p-value: 0.821;
-- 95% CI: ([-0.5703%, 0.7194%]) per month.
+The project therefore performs an external benchmark validation against the Kenneth French US monthly Momentum Factor (Mom).
 
-Under HAC12, the p-value is 0.807.
+The project spread is aligned by **realised holding month**. A project portfolio formed in month (t) earns its return in (t+1), so its (t+1) return is compared with French Mom in (t+1).
 
-### 5.3 Equal-weighted spread
+The constructions are intentionally different. French Mom uses six value-weighted portfolios from a 2x3 size-by-prior-return sort, while this project uses a screened investment universe and global quintiles. Equality is neither expected nor required.
 
-The equal-weighted Q5–Q1 spread averages:
+## 5.3 External benchmark results
 
-[
-0.002457,
-]
+Across 299 common monthly observations:
 
-or approximately:
+| Series | Mean monthly | Monthly volatility |
+|---|---:|---:|
+| Project VW | 0.0746% | 5.564% |
+| Project EW | 0.2457% | 4.632% |
+| Kenneth French Mom | 0.2021% | 4.634% |
 
-[
-0.2457%
-]
+The correlations are:
 
-per month.
+- Corr(Project VW, French Mom) = **0.8754**;
+- Corr(Project EW, French Mom) = **0.9165**;
+- Corr(Project VW, Project EW) = 0.8609.
 
-Under HAC6:
+A diagnostic HAC6 regression of the project VW spread on French Mom gives:
 
-- t-statistic: 0.870;
-- p-value: 0.384.
+- French Mom beta = 1.051;
+- HAC SE = 0.074;
+- t = 14.18;
+- 95% CI = [0.906, 1.196];
+- (R^2 = 0.766);
+- alpha = -0.138% per month, p = 0.404.
 
-Under HAC12:
+For the project EW spread:
 
-- p-value: 0.407.
+- French Mom beta = 0.916;
+- HAC SE = 0.039;
+- t = 23.61;
+- 95% CI = [0.840, 0.992];
+- (R^2 = 0.840);
+- alpha = +0.061% per month, p = 0.590.
 
-### 5.4 Baseline interpretation
-
-The equal-weighted spread is more than three times the value-weighted spread in point estimates, but neither is statistically distinguishable from zero under the fixed inference rule.
-
-This is important for the interpretation of later tests. The paper is not explaining the disappearance of a large unconditional momentum premium. Instead, it is examining how concentration and systematic exposures alter an already weak value-weighted implementation.
+The project implementation therefore exhibits very strong co-movement with an established external benchmark. The weak value-weighted mean is not evidence of an obvious one-month timing error or a fundamentally broken momentum implementation.
 
 ---
 
-## 6. Market Concentration
+# 6. Aggregate Market Concentration
 
-### 6.1 Concentration measures
+## 6.1 Measures
 
 Company-level concentration is measured using:
 
 - Top-5 market-cap share;
 - Top-10 market-cap share;
-- Herfindahl-Hirschman Index (HHI);
+- HHI;
 - effective number of firms, (1/HHI).
 
-The Top-10 company share declines from roughly 19–20% in the early 2000s to around 15% in the mid-2010s, then rises sharply after 2018. By end-2025, the Top-10 share is approximately 37%.
+Top-10 share declines toward roughly 15% around the mid-2010s before rising sharply. It reaches approximately 37% by end-2025.
 
-This change is economically large and motivates the central question of the paper.
+## 6.2 Primary conditioning regression
 
-### 6.2 Primary concentration regression
-
-The primary specification is:
+The primary specification is
 
 [
-Spread_{t+1}
-=
-alpha
-+
-eta Top10Share_t
-+
-epsilon_{t+1}.
+Spread_{t+1}=alpha+eta Top10Share_t+epsilon_{t+1}.
 ]
 
-Top-10 share is scaled so that the coefficient corresponds to a 10-percentage-point increase in concentration.
+Top-10 share is scaled so that the reported coefficient corresponds to a +10-percentage-point change in concentration.
 
-The estimated coefficient is:
+The primary VW coefficient is
 
 [
--0.003275.
+-0.3275%	ext{ per month per +10pp Top-10 share}.
 ]
 
-Thus, a 10-percentage-point increase in Top-10 market share is associated with a point estimate of approximately:
+Inference:
 
-[
--0.3275%
-]
+- HAC6 t = -0.620;
+- p = 0.536;
+- 95% CI = [-1.364%, 0.709%].
 
-in the subsequent monthly value-weighted momentum spread.
+Adding a linear time trend reduces the coefficient to -0.162% with p = 0.799.
 
-However, the estimate is imprecise:
+Using HHI produces a similarly imprecise result. Equal-weighted and Rank-IC specifications switch sign, and lagging concentration by one month does not change the overall conclusion.
 
-- HAC SE: 0.005286;
-- t-statistic: -0.620;
-- p-value: 0.536;
-- 95% CI: ([-1.3636%, 0.7086%]).
+## 6.3 Interpretation
 
-### 6.3 Time-trend robustness
+Aggregate concentration does not robustly predict subsequent momentum effectiveness.
 
-Adding a linear time trend reduces the Top-10 coefficient in magnitude:
-
-[
--0.001617.
-]
-
-The p-value rises to 0.799.
-
-This indicates that the negative primary coefficient is not robust to controlling for the strong secular time trend in concentration.
-
-### 6.4 HHI robustness
-
-Using HHI instead of Top-10 share produces:
-
-[
--0.006091
-]
-
-per 0.01 increase in HHI, with:
-
-- t-statistic: -0.723;
-- p-value: 0.470.
-
-Again, the estimate is negative but statistically imprecise.
-
-### 6.5 Equal-weighted and Rank-IC outcomes
-
-When the outcome is the equal-weighted spread, the Top-10 coefficient changes sign:
-
-[
-+0.003260,
-]
-
-with p-value 0.409.
-
-When the outcome is Rank IC, the coefficient is:
-
-[
-+0.006309,
-]
-
-with p-value 0.613.
-
-The lack of a common sign across value-weighted, equal-weighted, and Rank-IC outcomes weakens a simple interpretation in which higher concentration uniformly reduces momentum effectiveness.
-
-### 6.6 Lagged concentration
-
-Using concentration from the prior month gives a value-weighted coefficient of:
-
-[
--0.003030,
-]
-
-with p-value 0.582.
-
-The timing robustness therefore does not materially change the conclusion.
-
-### 6.7 Concentration interpretation
-
-The aggregate regressions do not provide robust evidence that market concentration linearly predicts subsequent momentum performance.
-
-This does not imply that concentration is irrelevant. Rather, it suggests that the mechanism may operate through portfolio composition and weights rather than through a smooth aggregate state variable.
+This finding rejects an overly simple narrative in which rising concentration mechanically destroys momentum alpha. It does not, however, rule out a more direct portfolio-composition mechanism.
 
 ---
 
-## 7. Mega-Cap Exclusion
+# 7. Mega-Cap Exclusion
 
-### 7.1 Motivation
+## 7.1 Design
 
-A value-weighted portfolio can be heavily influenced by a small number of firms even if the cross-sectional signal itself remains unchanged. To test this mechanism directly, the largest firms are removed from the formation universe before momentum quintiles are re-formed.
+Each month, the largest firms are identified at the PERMCO level using the broad market-state universe. All securities belonging to the relevant companies are removed from the formation universe.
 
-Mega-cap firms are identified at the PERMCO company level using the broad market-state universe.
+The primary specification excludes the Top 10 companies. Top 5 and Top 20 are retained as robustness checks.
 
-### 7.2 Excluding the top five companies
+## 7.2 Results
 
-Excluding the top five companies increases the mean value-weighted spread to:
+| Exclusion | Mean VW spread | Change vs baseline | HAC6 p | HAC12 p |
+|---|---:|---:|---:|---:|
+| Top 5 | 0.1375% | +0.0629 pp | 0.357 | 0.329 |
+| Top 10 | 0.1844% | +0.1099 pp | 0.269 | 0.250 |
+| Top 20 | 0.2456% | +0.1711 pp | 0.116 | 0.092 |
 
-[
-0.001375,
-]
+For Top-10 exclusion, the approximate HAC6 95% confidence interval for the monthly change is [-0.085%, 0.305%].
 
-or 0.1375% per month.
-
-Relative to baseline, the difference is:
-
-[
-+0.000629,
-]
-
-or approximately +0.0629 percentage points per month.
-
-HAC6 p-value: 0.357.
-
-### 7.3 Excluding the top ten companies
-
-The primary mega-cap test excludes the ten largest companies.
-
-The resulting mean spread is:
-
-[
-0.001844,
-]
-
-or approximately:
-
-[
-0.1844%
-]
-
-per month.
-
-The difference from baseline is:
-
-[
-+0.001099,
-]
-
-or approximately:
-
-[
-+0.1099
-]
-
-percentage points per month.
-
-Inference:
-
-- HAC6 t-statistic: 1.105;
-- HAC6 p-value: 0.269;
-- HAC12 p-value: 0.250.
-
-The point estimate is economically meaningful but statistically imprecise.
-
-### 7.4 Excluding the top twenty companies
-
-Excluding the top twenty companies increases the spread further to:
-
-[
-0.002456,
-]
-
-or 0.2456% per month.
-
-The difference from baseline is:
-
-[
-+0.001711,
-]
-
-or +0.1711 percentage points per month.
-
-Inference:
-
-- HAC6 t-statistic: 1.574;
-- HAC6 p-value: 0.116;
-- HAC12 p-value: 0.092.
-
-The increasingly positive point estimates from Top-5 to Top-20 exclusion are economically suggestive, but this ordering is treated as descriptive rather than used to promote Top-20 as a new primary specification after observing the p-values.
-
-### 7.5 Interpretation
-
-Mega-cap exclusion changes the value-weighted implementation materially. The next question is whether this happens because the exclusion changes momentum rankings and quintile boundaries, or because the removed firms carry large portfolio weights.
+The point estimate becomes larger as more mega-cap companies are excluded. This ordering is treated descriptively. Top 20 is not promoted to the primary specification based on its lower p-value.
 
 ---
 
-## 8. Mega-Cap Decomposition
+# 8. Mega-Cap Decomposition
 
-### 8.1 Decomposition design
+## 8.1 Why exclusion alone is insufficient
 
-The total effect of mega-cap exclusion is decomposed into two parts.
+Removing mega-cap firms and then re-forming quintiles changes two objects at once:
 
-First, construct a **fixed-rank exclusion** portfolio:
+1. portfolio weights;
+2. quintile membership.
 
-- preserve the original baseline quintile membership;
-- remove securities belonging to the Top-10 companies within those original quintiles;
-- renormalise the remaining value weights.
+To identify the mechanism, the Top-10 exclusion effect is decomposed exactly.
 
-Second, compare that portfolio with the fully re-formed ex-Top10 portfolio.
+A fixed-rank portfolio preserves the original Q1-Q5 membership, removes Top-10 company securities within those original portfolios, and renormalises the remaining value weights.
 
-The identity is:
-
-[
-TotalChange
-=
-DirectWeightEffect
-+
-ReRankingEffect.
-]
-
-where:
+Define:
 
 [
-DirectWeightEffect
-=
-FixedRanks-Baseline,
+DirectWeightEffect=FixedRanks-Baseline,
 ]
-
-and:
 
 [
-ReRankingEffect
-=
-Reformed-FixedRanks.
+ReRankingEffect=Reformed-FixedRanks,
 ]
 
-### 8.2 Direct weight effect
-
-The mean direct weight effect is:
+so that
 
 [
-+0.001114,
+TotalChange=DirectWeightEffect+ReRankingEffect.
 ]
 
-or approximately:
+## 8.2 Results
 
-[
-+0.1114
-]
+| Component | Mean monthly effect | HAC6 p | HAC12 p |
+|---|---:|---:|---:|
+| Direct weight | +0.1114 pp | 0.259 | 0.242 |
+| Re-ranking | -0.0016 pp | 0.866 | 0.866 |
+| Total | +0.1099 pp | 0.269 | 0.250 |
 
-percentage points per month.
+The approximate HAC6 95% CI for the direct-weight effect is [-0.082%, 0.305%] per month.
 
-Inference:
+The decomposition strongly **localises the observed exclusion point estimate** to the direct-weight channel. It does not, by itself, establish that the population mean direct-weight effect is positive with conventional statistical precision.
 
-- HAC6 t-statistic: 1.129;
-- HAC6 p-value: 0.259;
-- HAC12 p-value: 0.242.
+This distinction is important. The clean decomposition answers **where the observed monthly-average difference comes from**; the wide confidence interval answers **how precisely its population magnitude is estimated**.
 
-### 8.3 Re-ranking effect
+## 8.3 Leg-level exposure
 
-The mean re-ranking effect is:
+Top-10 companies account on average for:
 
-[
--0.000016,
-]
+- 9.95% of Q1 formation weight;
+- 17.66% of Q5 formation weight.
 
-or approximately:
+Median shares are 8.26% and 15.87%, respectively.
 
-[
--0.0016
-]
-
-percentage points per month.
-
-Inference:
-
-- HAC6 t-statistic: -0.169;
-- HAC6 p-value: 0.866;
-- HAC12 p-value: 0.866.
-
-This effect is economically negligible.
-
-### 8.4 Total effect
-
-The total ex-Top10 change is:
-
-[
-+0.001099,
-]
-
-matching the exclusion experiment.
-
-Inference:
-
-- HAC6 t-statistic: 1.105;
-- HAC6 p-value: 0.269;
-- HAC12 p-value: 0.250.
-
-### 8.5 Leg-level mega-cap weights
-
-Within the original baseline quintiles, Top-10 companies account on average for:
-
-- Q1 formation weight share: 9.95%;
-- Q5 formation weight share: 17.66%.
-
-The corresponding median weight shares are:
-
-- Q1: 8.26%;
-- Q5: 15.87%.
-
-Thus, mega-cap firms receive substantially more weight in the winner portfolio than in the loser portfolio on average.
-
-Their mean return contribution is:
-
-- Q1: 0.1537 percentage points per month;
-- Q5: 0.2195 percentage points per month.
-
-The difference is economically meaningful but highly variable over time.
-
-### 8.6 Decomposition interpretation
-
-This is the clearest mechanism result in the paper.
-
-Almost the entire Top-10 exclusion effect comes from direct changes in value weights:
-
-[
-0.1114%quad 	ext{direct weight effect}
-]
-
-versus approximately:
-
-[
--0.0016%quad 	ext{re-ranking effect}.
-]
-
-The implication is that mega-cap concentration changes the realised performance of a value-weighted momentum portfolio without materially changing the underlying signal ordering.
-
-This distinction is central to the paper's thesis.
+The winner portfolio therefore carries substantially more mega-cap weight than the loser portfolio on average.
 
 ---
 
-## 9. Industry Neutralisation
+# 9. Concentration-to-Mechanism Bridge
 
-### 9.1 Methodology
+The decomposition demonstrates that the observed Top-10 exclusion point estimate is a weight effect. A remaining question is whether this weight mechanism is actually stronger when the **aggregate market is more concentrated**.
 
-Stocks are mapped to contemporaneous Fama-French 49 industries using SIC codes.
+Two bridge specifications were fixed before observing the results.
 
-For each industry-month, the equal-weighted mean raw momentum signal is calculated. The industry-neutral signal is:
+## 9.1 Does concentration predict the realised direct-weight return effect?
 
 [
-MOM^{IN}_{i,t}
-=
-MOM_{i,t}
--
-overline{MOM}_{g,t}.
+DirectWeightEffect_t=alpha+eta Top10Share_t+epsilon_t.
 ]
 
-Industries require at least ten valid stocks in the month.
+Per +10pp Top-10 market share:
 
-Global quintiles are then re-formed using the neutralised signal.
+- coefficient = +0.1840 percentage points per month;
+- HAC6 SE = 0.2383 percentage points;
+- t = 0.772;
+- p = 0.440;
+- 95% CI = [-0.283%, 0.651%];
+- N = 299.
 
-### 9.2 Value-weighted result
+HAC12 p = 0.316.
 
-The raw value-weighted spread is:
+With a linear time trend, the coefficient is +0.2748 percentage points, p = 0.283.
+
+Thus, aggregate concentration does **not** precisely predict the realised direct-weight return effect.
+
+## 9.2 Does concentration predict the mega-cap weight imbalance?
+
+Define:
 
 [
-+0.000746.
+WeightGap_t=Top10Weight_{Q5,t}-Top10Weight_{Q1,t}.
 ]
 
-The FF49-neutral spread is:
+Regressing this weight gap on Top-10 market share gives, per +10pp concentration:
+
+- coefficient = **+24.48 percentage points**;
+- HAC6 SE = 3.71 percentage points;
+- t = 6.60;
+- p < 0.0000000001;
+- 95% CI = [17.21 pp, 31.75 pp];
+- N = 300;
+- (R^2 = 0.297).
+
+HAC12 gives essentially the same result.
+
+After adding a linear time trend:
+
+- coefficient = **+9.93 percentage points**;
+- t = 2.51;
+- p = 0.012;
+- 95% CI = [2.18 pp, 17.68 pp].
+
+## 9.3 Interpretation
+
+This bridge is central to the final interpretation.
+
+Higher aggregate concentration is strongly associated with a larger **portfolio-exposure imbalance**: mega-cap companies take relatively more weight in the winner leg than the loser leg as market concentration rises.
+
+However, the return consequence of that imbalance is noisy. The direct-weight return effect depends not only on the size of the weight imbalance but also on the subsequent realised returns of the mega-cap companies occupying Q5 and Q1.
+
+The evidence therefore supports the following statement:
+
+> **market concentration clearly changes the geometry of value-weighted momentum exposure, but it does not generate a stable one-to-one mapping from concentration to subsequent momentum returns.**
+
+---
+
+# 10. Industry Neutralisation
+
+## 10.1 Method
+
+Securities are mapped to contemporaneous Fama-French 49 industries using SIC codes.
+
+Within each valid industry-month, the equal-weighted industry mean momentum signal is subtracted:
 
 [
--0.000255.
+MOM^{IN}_{i,t}=MOM_{i,t}-overline{MOM}_{g,t}.
 ]
 
-The difference is:
+Industries require at least ten stocks. Global quintiles are then re-formed on the neutralised signal.
+
+## 10.2 Results
+
+Raw VW spread:
 
 [
--0.001001,
++0.0746%	ext{/month}.
 ]
 
-or approximately:
+FF49-neutral VW spread:
 
 [
--0.1001
-]
-
-percentage points per month.
-
-Inference:
-
-- HAC6 t-statistic: -0.547;
-- HAC6 p-value: 0.585;
-- HAC12 p-value: 0.594.
-
-### 9.3 Rank IC
-
-Raw Rank IC:
-
-[
-0.007680.
-]
-
-Industry-neutral Rank IC:
-
-[
-0.007625.
+-0.0255%	ext{/month}.
 ]
 
 Difference:
 
 [
--0.000054.
+-0.1001%	ext{/month}.
 ]
 
-Inference:
+HAC6 p = 0.585. The approximate 95% CI is [-0.459%, 0.259%].
 
-- HAC6 t-statistic: -0.017;
-- HAC6 p-value: 0.986;
-- HAC12 p-value: 0.986.
+More importantly:
 
-### 9.4 Interpretation
+- Raw Rank IC = 0.007680;
+- FF49-neutral Rank IC = 0.007625;
+- difference = -0.000054;
+- HAC6 p = 0.986.
 
-The near-identical Rank IC before and after industry neutralisation is particularly informative.
+The ranking information is essentially unchanged.
 
-If the raw momentum ranking were primarily driven by industry common trends, removing those trends should materially alter cross-sectional predictive ability. Instead, the Rank IC is virtually unchanged.
+## 10.3 Interpretation
 
-Industry common trends therefore do not appear to be the main explanation for the weak raw momentum signal or for the mega-cap implementation effect.
+The result does not reproduce a large improvement from industry neutralisation in this sample. Broad industry common trends are therefore not the main explanation for the observed cross-sectional ranking or for the mega-cap implementation effect.
 
 ---
 
-## 10. Ex-Ante Market-Beta Neutralisation
+# 11. Market-Beta Neutralisation
 
-### 10.1 Beta estimation
+## 11.1 Ex-ante beta estimation
 
-At each formation month, stock beta is estimated using the daily excess-return CAPM:
+For each stock and formation month:
 
 [
 R_{i,d}-R_{f,d}
@@ -678,303 +530,233 @@ R_{i,d}-R_{f,d}
 alpha_{i,t}
 +
 eta_{i,t}(R_{m,d}-R_{f,d})
-+
-epsilon_{i,d}.
++epsilon_{i,d}.
 ]
 
-The estimation window is defined on the CRSP market trading calendar:
+The locked specification uses:
 
-- 252 trading days;
-- skip the five market trading days immediately before formation;
-- minimum 126 valid paired observations.
+- 252 CRSP market trading days;
+- skip the five trading days immediately before formation;
+- minimum 126 valid paired observations;
+- no winsorisation;
+- no clipping;
+- no beta imputation.
 
-No beta winsorisation, clipping, forward filling, or imputation is used.
+Average valid-beta coverage across the formation universe is approximately 97.9%. Coverage is effectively complete among stocks entering Q1 and Q5.
 
-Overall valid-beta coverage averages approximately 97.9% across the formation universe.
+## 11.2 Primary market-overlay hedge
 
-### 10.2 Beta-eligible comparator
+The primary beta-neutral portfolio preserves the original stock holdings and within-leg value weights.
 
-The beta-neutral portfolio is not compared with a different stock sample.
-
-Instead:
-
-1. stocks without valid beta are removed;
-2. original quintile membership is preserved;
-3. within-leg value weights are renormalised;
-4. this beta-eligible raw portfolio becomes the direct comparator.
-
-In the final momentum Q1/Q5 portfolios, beta coverage is effectively complete, so the beta-eligible raw spread is numerically identical to the original spread.
-
-### 10.3 Market-overlay construction
-
-Let:
+Let
 
 [
-eta_{LS,t}
-=
-eta_{Q5,t}
--
-eta_{Q1,t}.
+eta_{LS,t}=eta_{Q5,t}-eta_{Q1,t}.
 ]
 
-The primary beta-neutral spread is:
+Then
 
 [
 R^{BN}_{LS,t+1}
 =
 R^{Eligible}_{LS,t+1}
 -
-hateta_{LS,t}
-R^{MKT,excess}_{t+1}.
+hateta_{LS,t}R^{MKT,excess}_{t+1}.
 ]
 
-This preserves the original momentum holdings and internal stock weights and changes only the portfolio's market exposure.
+## 11.3 Results
 
-### 10.4 Return effect
+- Original VW spread = +0.0746%/month;
+- Beta-eligible spread = +0.0746%/month;
+- Beta-neutral spread = -0.0389%/month;
+- Neutralisation effect = -0.1135 percentage points/month.
 
-Original value-weighted spread:
+Inference on the neutralisation effect:
+
+- HAC6 t = -0.762;
+- p = 0.446;
+- approximate 95% CI = [-0.405%, 0.178%];
+- HAC12 p = 0.388.
+
+A leg-rescaling robustness construction produces a smaller negative point estimate and similarly weak inference.
+
+## 11.4 Realised market beta
+
+The raw momentum portfolio has ex-post monthly market beta:
 
 [
-+0.000746.
+-0.381.
 ]
 
-Beta-neutral spread:
+HAC6 p = 0.00044.
+
+After ex-ante neutralisation:
 
 [
--0.000389.
+-0.158,
 ]
 
-Neutralisation effect:
+with p = 0.0405.
 
-[
--0.001135,
-]
+Thus, the hedge substantially reduces realised market exposure but does not mechanically eliminate it.
 
-or approximately:
+The difference between near-zero average ex-ante net beta and more negative realised time-series beta is not explained by a simple linear relationship between formation beta and next-month market return. Their correlation is only about 0.054, and market-return quintiles do not reveal a monotonic pattern.
 
-[
--0.1135
-]
+## 11.5 Interpretation
 
-percentage points per month.
+Market beta matters for the realised behaviour of the strategy, but beta neutralisation does not reveal a statistically robust hidden momentum premium.
 
-Inference:
-
-- HAC6 t-statistic: -0.762;
-- HAC6 p-value: 0.446;
-- HAC12 p-value: 0.388.
-
-Thus, beta neutralisation lowers the average momentum spread in point estimates, but the effect is statistically imprecise.
-
-### 10.5 Leg-rescaling robustness
-
-A separate robustness construction rescales the long and short legs to achieve zero ex-ante beta while holding total gross exposure at 200%.
-
-The mean neutralisation effect under this construction is:
-
-[
--0.000578,
-]
-
-or -0.0578 percentage points per month.
-
-Inference:
-
-- HAC6 p-value: 0.703;
-- HAC12 p-value: 0.657.
-
-The direction is consistent with the primary market-overlay construction.
-
-### 10.6 Ex-post realised market beta
-
-The raw momentum portfolio has a realised monthly market beta of:
-
-[
--0.3813.
-]
-
-Under HAC6:
-
-- t-statistic: -3.515;
-- p-value: 0.00044.
-
-After ex-ante beta neutralisation, realised market beta becomes:
-
-[
--0.1580.
-]
-
-Under HAC6:
-
-- t-statistic: -2.049;
-- p-value: 0.0405.
-
-Thus, ex-ante hedging materially reduces the magnitude of realised market exposure, though it does not eliminate it.
-
-This is not internally inconsistent. Ex-ante beta neutrality is a construction property based on estimated conditional beta. Ex-post time-series beta reflects realised covariance with the market and can remain non-zero because betas are noisy and time varying.
-
-Additional diagnostics show only a 0.054 correlation between ex-ante net beta and subsequent market excess return, with no simple monotonic relationship across market-return quintiles.
-
-### 10.7 Interpretation
-
-Market beta matters for the realised time-series behaviour of the strategy, but neutralisation does not reveal a statistically robust hidden momentum premium.
-
-The evidence therefore does not support the view that the weak value-weighted momentum result is primarily an artifact of uncompensated market exposure.
+Ex-ante neutrality should also not be confused with ex-post neutrality. The former is constructed from estimated conditional betas; the latter reflects realised covariance over time.
 
 ---
 
-## 11. Integrated Results
+# 12. Integrated Interpretation
 
-The paper asks three distinct questions.
+The study asks three distinct questions.
 
-### 11.1 Does concentration destroy momentum ranking ability?
+## 12.1 Does concentration destroy momentum ranking information?
 
-The evidence is weak.
+The evidence does not support a strong affirmative answer.
 
-- Mean Rank IC is positive but small.
-- Rank IC does not show a robust negative relationship with Top-10 concentration.
-- Removing mega-cap companies leaves Rank IC largely unchanged.
-- Industry neutralisation leaves Rank IC almost exactly unchanged.
+- Mean Rank IC is weak but positive.
+- Top-10 concentration does not robustly reduce Rank IC.
+- Mega-cap exclusion changes value-weighted returns much more than ranking diagnostics.
+- Industry neutralisation leaves Rank IC almost unchanged.
+- The project momentum series strongly co-moves with the established French momentum benchmark.
 
-There is therefore no strong evidence that rising concentration systematically destroys the information contained in the cross-sectional momentum ranking.
+There is no clear evidence that rising concentration systematically destroys the informational content of the 12-2 ranking.
 
-### 11.2 Does concentration affect value-weighted implementation?
+## 12.2 Does concentration change value-weighted implementation?
 
-The evidence is considerably stronger.
+Yes, descriptively and mechanically.
 
-- Excluding the Top-10 companies raises the VW spread by about 11 basis points per month.
-- Equal-weighted performance changes much less.
-- The decomposition assigns almost the entire effect to direct portfolio weights.
-- Re-ranking contributes essentially zero.
+The Top-10 exclusion point estimate is almost entirely localised to the direct-weight component. More importantly, the final bridge test shows that aggregate concentration strongly predicts the **Q5-minus-Q1 mega-cap weight gap**, including after controlling for a linear trend.
 
-This is the central mechanism result.
+This is the strongest link between aggregate concentration and the portfolio-construction mechanism.
 
-### 11.3 Are systematic exposures the main explanation?
+The return consequence remains statistically imprecise because exposure and payoff are separate objects. A larger mega-cap weight imbalance does not guarantee a larger monthly return distortion unless the relevant mega-cap stocks subsequently earn unusually high or low returns.
 
-The evidence is again weak.
+## 12.3 Are industry or market beta the main hidden explanation?
 
-- Industry neutralisation does not improve signal ranking.
-- Beta neutralisation materially reduces realised market beta.
-- However, the return effect of beta neutralisation is not statistically precise.
-- No robust hidden premium emerges after either industry or market-beta control.
+The evidence suggests no.
 
----
+Industry neutralisation leaves ranking quality virtually unchanged. Beta neutralisation materially changes market exposure but does not uncover a statistically robust positive momentum premium.
 
-## 12. Economic Interpretation
-
-The most coherent interpretation is that market concentration matters through the mapping from cross-sectional ranks to economic portfolio weights.
-
-A cross-sectional signal answers the question:
-
-> which stocks rank high or low?
-
-A value-weighted portfolio answers a different question:
-
-> how much capital is assigned to each ranked stock?
-
-When mega-cap firms become exceptionally large, the second mapping can change dramatically even if the first does not.
-
-This distinction explains why a value-weighted strategy can behave differently in a concentrated market without requiring the underlying rank signal to disappear.
-
-The result is particularly relevant for empirical asset-pricing and systematic-equity research. A decline in value-weighted long-short performance should not automatically be interpreted as evidence that the signal has become less informative. Researchers should separately examine ranking quality, portfolio weighting, and systematic exposures.
+The main empirical distinction therefore remains ranking information versus value-weighted implementation.
 
 ---
 
-## 13. Statistical Interpretation
+# 13. What the Evidence Does and Does Not Establish
 
-Several economically meaningful point estimates in this paper are statistically imprecise.
+The paper's strongest result is structural rather than causal.
 
-This includes:
+It **does establish** that:
 
-- the baseline value-weighted momentum premium;
+- the observed Top-10 exclusion point estimate is almost entirely a direct-weight effect rather than a re-ranking effect;
+- rising aggregate concentration is strongly associated with a larger mega-cap weight imbalance between Q5 and Q1;
+- the project momentum implementation has high external correlation with the Kenneth French momentum benchmark;
+- industry neutralisation does not materially alter Rank IC;
+- ex-ante market hedging materially reduces realised market beta.
+
+It **does not establish** that:
+
+- a 10-percentage-point rise in concentration causally reduces future momentum returns by a fixed amount;
+- the positive mean Top-10 exclusion return effect is estimated with high statistical precision;
+- removing mega-cap firms would necessarily improve a live momentum strategy after trading and financing costs;
+- the conclusions generalise automatically to other signals.
+
+This distinction keeps the interpretation proportional to the evidence.
+
+---
+
+# 14. Limitations
+
+## 14.1 Sample period
+
+The sample begins in 2000 and does not include the earlier decades in which the original momentum literature was established.
+
+The sample contains 312 formation months and 299 valid momentum-performance months, limiting statistical power for persistent state variables.
+
+## 14.2 Momentum-only scope
+
+This completed research version studies one signal: 12-2 momentum.
+
+The results should not automatically be extrapolated to value, reversal, low volatility, profitability, quality, or other cross-sectional characteristics.
+
+## 14.3 Observational identification
+
+Market concentration is persistent, strongly trending, and not randomly assigned.
+
+The paper therefore identifies empirical associations and portfolio mechanics rather than a clean causal effect of concentration.
+
+The bridge weight-gap result survives a linear trend, which strengthens the mechanism interpretation, but a deterministic trend does not remove all possible common-state confounding.
+
+## 14.4 Statistical precision
+
+Several economically meaningful point estimates are imprecisely estimated:
+
+- the unconditional VW momentum spread;
 - the aggregate concentration coefficient;
-- the mega-cap exclusion effect;
-- the direct weight decomposition effect;
-- industry-neutralisation return changes;
-- beta-neutralisation return changes.
+- the Top-10 exclusion return effect;
+- the direct-weight return effect;
+- industry-neutralisation return differences;
+- beta-neutralisation return differences.
 
-The appropriate conclusion is therefore not that these mechanisms are definitively established in a causal sense.
+Confidence intervals are therefore reported and interpretation does not rely on statistical-significance thresholds alone.
 
-Instead, the evidence supports a hierarchy:
+## 14.5 Transaction and implementation costs
 
-1. **strongest descriptive mechanism evidence:** mega-cap weight concentration;
-2. **weak evidence:** aggregate concentration forecasting momentum;
-3. **little evidence:** industry-neutralisation improving ranking;
-4. **meaningful exposure change but weak return evidence:** beta neutralisation.
+The analysis focuses on gross returns.
 
-The distinction between economic magnitude and statistical precision is maintained throughout.
+A live long-short implementation would face turnover, bid-ask spreads, market impact, shorting costs, borrow availability, financing, and operational constraints. Mega-cap removal could itself change liquidity and turnover.
 
----
+The paper therefore makes a research-mechanism claim rather than a claim about directly tradable net alpha.
 
-## 14. Limitations
+## 14.6 Beta estimation error
 
-### 14.1 Sample length
+Ex-ante beta is estimated, not observed.
 
-The sample spans 2000–2025. This period is economically rich but still provides only 312 monthly formation observations and 299 valid momentum-performance months. Time-series inference therefore has limited power.
+Conditional betas can vary over time, and estimation error can leave non-zero realised market exposure even when the constructed ex-ante beta is zero.
 
-### 14.2 Momentum-only first research version
+## 14.7 Multiple robustness checks
 
-The original project concept considered several price-based signals. The completed first version deliberately narrows the empirical scope to momentum in order to avoid uncontrolled specification expansion.
+Robustness specifications are treated as dependent diagnostics rather than independent discovery tests.
 
-Results should not automatically be generalised to reversal, low volatility, beta, profitability, or value signals.
-
-### 14.3 Observational design
-
-The study is observational. Market concentration is not randomly assigned and is strongly persistent over time.
-
-The regressions therefore identify conditional empirical relationships, not causal effects of concentration.
-
-### 14.4 Persistent concentration trend
-
-Top-10 market share has a strong secular trend. The project includes a linear-trend robustness check, but this does not fully solve all identification problems associated with persistent macro-financial state variables.
-
-### 14.5 Transaction costs
-
-The present version focuses on gross portfolio returns and mechanisms rather than a full trading-cost model.
-
-A live strategy would face turnover, bid-ask spreads, market impact, shorting costs, financing, and implementation constraints.
-
-### 14.6 Long-short cumulative-return charts
-
-Cumulative charts in the reporting notebook should be interpreted as descriptive indices of repeated monthly spread returns, not as a fully specified self-financing live-trading wealth process. A final publication version should state the assumed capital convention explicitly or use cumulative arithmetic spread as the main visual.
-
-### 14.7 Beta estimation error
-
-Ex-ante beta is estimated rather than observed. Even with a 252-day window, beta estimates can be noisy, particularly for securities with limited daily history.
-
-The project therefore treats beta neutralisation as an exposure-control exercise rather than a perfect hedge.
-
-### 14.8 Multiple robustness tests
-
-Robustness specifications are not independent hypothesis tests. The project avoids selecting a preferred specification based on which p-value appears most favourable.
-
-For example, the smaller HAC12 p-value for the Top-20 exclusion is not used to redefine the primary mega-cap test.
+Primary rules were frozen before results where possible, and smaller p-values in secondary specifications are not used to redefine the research question after the fact.
 
 ---
 
-## 15. Conclusion
+# 15. Conclusion
 
-This paper asks whether rising US equity-market concentration distorts cross-sectional momentum.
+This paper studies whether rising US equity-market concentration distorts cross-sectional momentum.
 
-The answer is nuanced.
+The evidence does not support a simple claim that aggregate concentration systematically destroys momentum ranking ability. The baseline momentum signal is weak over 2000-2025, but its implementation is externally validated against the Kenneth French Momentum Factor, and ranking diagnostics remain broadly stable across mega-cap exclusion and industry neutralisation.
 
-There is no robust evidence that aggregate market concentration systematically reduces momentum's cross-sectional ranking ability. The baseline Rank IC is weak, but neither concentration conditioning nor industry neutralisation reveals a clear deterioration in the information content of the signal.
+The more informative result lies in portfolio implementation.
 
-The more informative result comes from portfolio implementation. Removing mega-cap companies raises the value-weighted momentum spread, and an exact decomposition shows that almost the entire change comes from direct portfolio weights rather than re-ranking. This suggests that concentration can materially alter the realised behaviour of a value-weighted strategy even when the underlying signal ranking remains largely unchanged.
+Removing the ten largest companies raises the value-weighted momentum spread by about 11 basis points per month in point estimates. An exact decomposition localises virtually the entire observed difference to direct portfolio weights rather than re-ranking. The final bridge test then connects this mechanism back to aggregate concentration: as the market becomes more concentrated, the mega-cap weight imbalance between the winner and loser portfolios becomes substantially larger, including after a linear time trend.
 
-Industry and market-beta controls do not reveal a robust hidden momentum premium. Beta neutralisation materially reduces realised market exposure but produces a statistically imprecise decline in average momentum returns.
+At the same time, the realised return effect of that weight channel remains noisy and statistically imprecise. This distinction is economically important. Concentration can clearly change **exposure** without generating a deterministic change in **payoff**.
 
-The central conclusion is therefore:
+Industry and market-beta controls do not reveal a robust hidden momentum premium. Beta hedging reduces realised market exposure but does not overturn the return conclusion.
 
-> **market concentration appears more relevant to the implementation of value-weighted cross-sectional momentum than to the informational content of the momentum ranking itself.**
+The final conclusion is therefore:
 
-More broadly, the results highlight a practical research lesson. In a concentrated market, observed strategy performance should be decomposed into signal quality, portfolio weighting, and systematic exposure before concluding that a factor has strengthened or weakened.
+> **market concentration appears more relevant to the portfolio implementation of value-weighted cross-sectional momentum than to the informational content of the momentum ranking itself.**
+
+More broadly, the project illustrates a practical principle for quantitative equity research. When factor performance changes in a concentrated market, researchers should decompose the observation into three separate questions:
+
+1. did the cross-sectional ranking weaken?
+2. did the weighting rule concentrate economic exposure?
+3. did systematic factor exposures change?
+
+Only after separating those layers should a weaker realised portfolio be described as genuine factor decay.
 
 ---
 
-## Appendix A. Core Numerical Results
+# Appendix A. Core Results
 
-### A.1 Baseline
+## A.1 Baseline
 
 | Outcome | Mean | HAC6 t | HAC6 p | HAC12 p |
 |---|---:|---:|---:|---:|
@@ -982,49 +764,106 @@ More broadly, the results highlight a practical research lesson. In a concentrat
 | VW Q5-Q1 | 0.0746%/mo | 0.227 | 0.821 | 0.807 |
 | EW Q5-Q1 | 0.2457%/mo | 0.870 | 0.384 | 0.407 |
 
-### A.2 Concentration regressions
+## A.2 Aggregate concentration
 
-| Specification | Estimate | HAC6 t | p |
-|---|---:|---:|---:|
-| Top10 -> VW spread | -0.3275% per +10pp | -0.620 | 0.536 |
-| Top10 + trend | -0.1617% per +10pp | -0.254 | 0.799 |
-| HHI -> VW spread | -0.6091% per +0.01 | -0.723 | 0.470 |
-| Top10 -> EW spread | +0.3260% per +10pp | 0.826 | 0.409 |
-| Top10 -> Rank IC | +0.006309 per +10pp | 0.506 | 0.613 |
-| Lagged Top10 -> VW spread | -0.3030% per +10pp | -0.551 | 0.582 |
+| Specification | Estimate | HAC6 p |
+|---|---:|---:|
+| Top10 -> VW spread | -0.3275% per +10pp | 0.536 |
+| Top10 + linear trend | -0.1617% per +10pp | 0.799 |
+| HHI -> VW spread | -0.6091% per +0.01 | 0.470 |
+| Top10 -> EW spread | +0.3260% per +10pp | 0.409 |
+| Top10 -> Rank IC | +0.006309 per +10pp | 0.613 |
+| Lagged Top10 -> VW spread | -0.3030% per +10pp | 0.582 |
 
-### A.3 Mega-cap exclusion
+## A.3 Mega-cap exclusion
 
 | Specification | Mean spread | Mean change | HAC6 p | HAC12 p |
 |---|---:|---:|---:|---:|
-| ExTop5 | 0.1375% | +0.0629% | 0.357 | 0.329 |
-| ExTop10 | 0.1844% | +0.1099% | 0.269 | 0.250 |
-| ExTop20 | 0.2456% | +0.1711% | 0.116 | 0.092 |
+| ExTop5 | 0.1375% | +0.0629 pp | 0.357 | 0.329 |
+| ExTop10 | 0.1844% | +0.1099 pp | 0.269 | 0.250 |
+| ExTop20 | 0.2456% | +0.1711 pp | 0.116 | 0.092 |
 
-### A.4 Mega-cap decomposition
+## A.4 Mega-cap decomposition
 
 | Component | Mean effect | HAC6 p | HAC12 p |
 |---|---:|---:|---:|
-| Direct weight | +0.1114%/mo | 0.259 | 0.242 |
-| Re-ranking | -0.0016%/mo | 0.866 | 0.866 |
-| Total | +0.1099%/mo | 0.269 | 0.250 |
+| Direct weight | +0.1114 pp/mo | 0.259 | 0.242 |
+| Re-ranking | -0.0016 pp/mo | 0.866 | 0.866 |
+| Total | +0.1099 pp/mo | 0.269 | 0.250 |
 
-### A.5 Industry neutralisation
+## A.5 Concentration-mechanism bridge
+
+| Outcome | Coefficient per +10pp Top10 share | HAC6 p | 95% CI |
+|---|---:|---:|---:|
+| Direct-weight return effect | +0.1840 pp/mo | 0.440 | [-0.283, 0.651] pp |
+| Q5-Q1 Top10 weight gap | +24.48 pp | <1e-10 | [17.21, 31.75] pp |
+| Q5-Q1 weight gap + time trend | +9.93 pp | 0.012 | [2.18, 17.68] pp |
+
+## A.6 Industry neutralisation
 
 | Outcome | Raw | Neutral | Change | HAC6 p |
 |---|---:|---:|---:|---:|
-| VW spread | +0.0746% | -0.0255% | -0.1001% | 0.585 |
+| VW spread | +0.0746% | -0.0255% | -0.1001 pp | 0.585 |
 | Rank IC | 0.007680 | 0.007625 | -0.000054 | 0.986 |
 
-### A.6 Beta neutralisation
+## A.7 Beta neutralisation
 
 | Metric | Estimate |
 |---|---:|
 | Original VW spread | +0.0746%/mo |
 | Beta-neutral VW spread | -0.0389%/mo |
-| Neutralisation effect | -0.1135%/mo |
+| Neutralisation effect | -0.1135 pp/mo |
 | HAC6 p | 0.446 |
 | HAC12 p | 0.388 |
-| Ex-post beta, raw | -0.381 |
-| Ex-post beta, beta-neutral | -0.158 |
+| Ex-post market beta: raw | -0.381 |
+| Ex-post market beta: beta-neutral | -0.158 |
 
+## A.8 External benchmark validation
+
+| Metric | Project VW | Project EW |
+|---|---:|---:|
+| Correlation with French Mom | 0.875 | 0.917 |
+| Regression beta on French Mom | 1.051 | 0.916 |
+| Regression beta 95% CI | [0.906, 1.196] | [0.840, 0.992] |
+| Regression R2 | 0.766 | 0.840 |
+| Alpha p-value | 0.404 | 0.590 |
+
+---
+
+# Appendix B. Reproducibility and Audit Notes
+
+- Raw licensed CRSP data are excluded from the public repository.
+- Monthly data are cleaned to unique PERMNO-month observations before analysis.
+- Momentum was manually validated on extreme cases using calendar-month periods.
+- Market concentration is measured on a broader market-state universe and aggregated to PERMCO.
+- Multiple share classes are combined for concentration but remain separate securities for return analysis.
+- CRSP CIZ `MthRet` is used directly; official documentation states that it compounds daily total returns and includes delisting returns when appropriate.
+- Daily stock data were audited for duplicate PERMNO-date rows before beta estimation.
+- Daily CRSP market and French RF align on 6,813 research-period trading dates.
+- The 252-day / 5-day skip / 126-observation beta rule was frozen before beta-neutral portfolio results.
+- HAC6 primary and HAC12 robustness were fixed before concentration and neutralisation interpretation.
+- Top-10 is the primary mega-cap exclusion specification; Top-5 and Top-20 remain robustness checks.
+- The concentration-mechanism bridge specifications were frozen before results.
+- External French Mom validation is aligned by realised holding month rather than formation-month label.
+
+---
+
+# References
+
+Daniel, K., & Moskowitz, T. J. (2016). Momentum crashes. *Journal of Financial Economics*, 122(2), 221-247.
+
+Ehsani, S., Harvey, C. R., & Li, F. *Is Sector-Neutrality in Factor Investing a Mistake?* Working paper.
+
+Frazzini, A., & Pedersen, L. H. (2014). Betting against beta. *Journal of Financial Economics*, 111(1), 1-25.
+
+Jegadeesh, N., & Titman, S. (1993). Returns to buying winners and selling losers: Implications for stock market efficiency. *Journal of Finance*, 48(1), 65-91.
+
+Moskowitz, T. J., & Grinblatt, M. (1999). Do industries explain momentum? *Journal of Finance*, 54(4), 1249-1290.
+
+Neuhann, D., & Sockin, M. (2024). *Financial Market Concentration and Misallocation*. Journal / working-paper version as cited in the project literature notes.
+
+Center for Research in Security Prices (CRSP). *CRSP US Stock & Indexes Database Guide, File Format 2.0 (CIZ)*.
+
+Center for Research in Security Prices (CRSP). *SIZ to CIZ Cross-Reference Guide*.
+
+Kenneth R. French Data Library. *Momentum Factor (Mom)* and daily research factors.
