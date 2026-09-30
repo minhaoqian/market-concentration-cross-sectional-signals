@@ -177,6 +177,39 @@ def _assert_clean_panel(df: pd.DataFrame) -> None:
         raise AssertionError("Missing MthCalDt remains in the clean panel.")
 
 
+
+def build_monthly_history_panel(raw_path: str | Path) -> pd.DataFrame:
+    """Build the security-level monthly history used for signal lookbacks/outcomes.
+
+    This panel deliberately stops *before* the formation-date size and price
+    screens. A stock's signal history and next-month realised return should not
+    disappear merely because it failed the investability screen in an earlier
+    or later month.
+
+    Applied here:
+    - exact-row deduplication;
+    - validation of the WRDS CIZ common-stock query;
+    - primary exchange filter N/A/Q.
+
+    Not applied here:
+    - NYSE size breakpoint;
+    - $5 price screen.
+
+    Those are formation-date eligibility rules and belong in the clean panel.
+    """
+    raw = _read_raw(raw_path)
+    _assert_common_stock_query(raw)
+    deduped, _ = _deduplicate_exact_rows(raw)
+    history = _apply_exchange_filter(deduped)
+
+    if history.duplicated(KEY).any():
+        raise AssertionError(
+            "History panel is not unique on PERMNO + MthCalDt."
+        )
+
+    return history.sort_values(KEY).reset_index(drop=True)
+
+
 def build_clean_monthly_panel(
     raw_path: str | Path,
     config: CleaningConfig = CleaningConfig(),
