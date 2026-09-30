@@ -417,7 +417,7 @@ The exact two-sided turnover convention will be documented before cost-adjusted 
 
 ## Time-series mean returns and IC
 
-Use heteroskedasticity- and autocorrelation-consistent standard errors where appropriate. The exact Newey-West lag rule will be fixed before final tables are produced.
+Use heteroskedasticity- and autocorrelation-consistent standard errors where appropriate. The primary Newey-West/HAC lag is fixed at **6 months**, with **12 months** reported as a robustness specification. This convention is fixed before concentration-conditioned results are estimated.
 
 ## Cross-sectional regressions
 
