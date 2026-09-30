@@ -481,3 +481,33 @@ Secondary / robustness:
 New files:
 - src/conditioning.py
 - notebooks/06_concentration_conditioning.ipynb
+
+
+---
+
+## 30 September 2026 — Timing robustness added after core concentration result
+
+Before moving to more complex signal-neutralisation tests, the project adds one targeted timing robustness check.
+
+Primary timing remains:
+
+- concentration measured at formation month-end t;
+- momentum portfolio formed at t;
+- return realised in t+1.
+
+Robustness timing:
+
+- concentration measured at t-1;
+- momentum portfolio still formed at t;
+- return realised in t+1.
+
+Purpose:
+
+- remove any concern that the market-state variable is determined at the same month-end close used for portfolio formation;
+- verify that the weak concentration result is not an artefact of contemporaneous month-end measurement.
+
+Calendar-month lagging is used rather than exact-date subtraction because CRSP monthly dates are last trading dates.
+
+New notebook:
+
+- `notebooks/07_concentration_timing_robustness.ipynb`
