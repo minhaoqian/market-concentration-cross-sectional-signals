@@ -396,3 +396,53 @@ This aggregation applies generally, not only to Alphabet.
 - **Robustness:** the earlier PERMNO/security-level concentration measure is retained as a secondary specification.
 
 This revision was made during pre-analysis sanity checking, before the project examined any relationship between concentration and signal performance.
+
+
+---
+
+# 18. Separate Market-State and Signal-Investment Universes
+
+Before estimating any concentration-conditioned momentum result, the project separates two conceptually different universes.
+
+## Market-state universe — primary concentration denominator
+
+Used to measure the state of US equity-market concentration:
+
+- official CIZ US ordinary-common-stock filter;
+- PrimaryExch in {N, A, Q};
+- valid positive MthCap;
+- exact-row deduplication;
+- PERMCO aggregation before Top-N shares and HHI.
+
+It **does not** apply:
+
+- the $5 price screen;
+- the NYSE 20th-percentile market-cap screen.
+
+Rationale: those screens are portfolio-investability choices, not definitions of the US equity market. Applying them to the concentration denominator would make the market-state variable depend on the momentum strategy's portfolio construction.
+
+## Signal-investment universe
+
+Used to form momentum portfolios:
+
+- same CIZ common-stock and N/A/Q filters;
+- valid positive MthCap;
+- monthly NYSE 20th-percentile market-cap screen;
+- MthPrc >= $5.
+
+## Timing
+
+At formation month-end t:
+
+- Momentum signal = information through t-2;
+- Concentration state = company-level market concentration measured at t;
+- Portfolio eligibility = investability screens measured at t;
+- Outcome = realised return in calendar month t+1.
+
+Therefore the empirical timing is:
+
+```text
+Signal(i,t) + Concentration(t) + Eligibility(i,t)  ->  Return(i,t+1)
+```
+
+No t+1 concentration information may enter the formation decision.
