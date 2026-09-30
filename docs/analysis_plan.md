@@ -625,3 +625,34 @@ Inference:
 - compare Rank IC.
 
 Top-N membership is always determined from the broad market-state universe at formation month t.
+
+
+---
+
+## Mega-cap mechanism decomposition
+
+Before sector or beta neutralisation, the Top-10 exclusion result is decomposed into two components.
+
+### Fixed-rank counterfactual
+
+Hold baseline momentum quintile membership fixed, remove securities belonging to the top-10 PERMCO companies, and re-normalise value weights inside each original quintile.
+
+This isolates the direct portfolio-weight effect.
+
+### Re-formed counterfactual
+
+Remove the same top-10 PERMCO companies before portfolio formation and recompute quintile membership.
+
+### Exact decomposition
+
+```text
+TotalChange = ReformedSpread - BaselineSpread
+DirectWeightEffect = FixedRanksSpread - BaselineSpread
+ReRankingEffect = ReformedSpread - FixedRanksSpread
+
+TotalChange = DirectWeightEffect + ReRankingEffect
+```
+
+HAC6 is primary and HAC12 is robustness for each component mean.
+
+Additional diagnostics report top-10 formation-weight share and realised-return contribution inside the baseline Q1 and Q5 legs.
