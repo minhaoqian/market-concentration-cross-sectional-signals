@@ -21,6 +21,7 @@ MARKET_REQUIRED = {"dlycaldt", "vwretd"}
 
 
 def read_daily_stock(path: str | Path) -> pd.DataFrame:
+    """Read CRSP CIZ daily stock data and remove only redundant exact rows."""
     df = pd.read_csv(path, low_memory=False)
     missing = STOCK_REQUIRED.difference(df.columns)
     if missing:
@@ -35,7 +36,23 @@ def read_daily_stock(path: str | Path) -> pd.DataFrame:
         if bad:
             raise ValueError(f"Unexpected exchange codes: {sorted(bad)}")
 
-    return out
+    # The production extract was audited before analysis: all duplicate
+    # PERMNO-date rows were exact full-row duplicates and had identical DlyRet.
+    # Retain one copy only, then fail loudly if any non-identical key duplicate
+    # remains in a future extract.
+    out = out.drop_duplicates().copy()
+
+    if out.duplicated(["PERMNO", "DlyCalDt"]).any():
+        sample = out.loc[
+            out.duplicated(["PERMNO", "DlyCalDt"], keep=False)
+        ].sort_values(["PERMNO", "DlyCalDt"]).head(20)
+        raise ValueError(
+            "Non-identical PERMNO-date duplicates remain after exact-row "
+            "deduplication. Investigate before beta estimation.\n"
+            f"{sample.to_string(index=False)}"
+        )
+
+    return out.sort_values(["PERMNO", "DlyCalDt"]).reset_index(drop=True)
 
 
 def read_daily_market(path: str | Path) -> pd.DataFrame:
