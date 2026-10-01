@@ -7,7 +7,9 @@
 ## Start here
 
 - [Final report landing page](FINAL_REPORT.md)
-- [Full research paper](paper/research_note.md)
+- [Final PDF](paper/Minhao_Qian_Market_Concentration_Momentum_Final_SEPTEMBER.pdf)
+- [Final Word version](paper/Minhao_Qian_Market_Concentration_Momentum_Final_SEPTEMBER.docx)
+- [GitHub-readable full paper](paper/research_note.md)
 - [Final numerical results](docs/final_results_registry.md)
 - [Research log / methodology locks](docs/research_log.md)
 - [Project structure](docs/PROJECT_STRUCTURE.md)
