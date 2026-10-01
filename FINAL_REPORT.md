@@ -8,7 +8,9 @@ This is the final landing page for the completed research project.
 
 ### Read the paper
 
-- **Full paper:** [paper/research_note.md](paper/research_note.md)
+- **Final PDF:** [paper/Minhao_Qian_Market_Concentration_Momentum_Final_SEPTEMBER.pdf](paper/Minhao_Qian_Market_Concentration_Momentum_Final_SEPTEMBER.pdf)
+- **Final Word version:** [paper/Minhao_Qian_Market_Concentration_Momentum_Final_SEPTEMBER.docx](paper/Minhao_Qian_Market_Concentration_Momentum_Final_SEPTEMBER.docx)
+- **GitHub-readable paper:** [paper/research_note.md](paper/research_note.md)
 - **Final results registry:** [docs/final_results_registry.md](docs/final_results_registry.md)
 - **Research audit trail:** [docs/research_log.md](docs/research_log.md)
 - **Project structure:** [docs/PROJECT_STRUCTURE.md](docs/PROJECT_STRUCTURE.md)
