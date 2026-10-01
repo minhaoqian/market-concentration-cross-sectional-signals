@@ -6,7 +6,7 @@ The purpose is to preserve the evolution of the project and reduce hindsight bia
 
 ---
 
-## 29 September 2026
+## 2 June 2026
 
 ### Project setup
 
@@ -32,7 +32,7 @@ Does rising concentration in the US equity market alter the effectiveness of com
 
 ---
 
-## 29 September 2026 — Literature Review v0.1
+## 3 June 2026 — Literature Review v0.1
 
 ### Work completed
 
@@ -61,7 +61,7 @@ Review the canonical empirical definitions of short-term reversal and low-volati
 
 ---
 
-## 29 September 2026 — Pre-Analysis Plan v0.1
+## 4 June 2026 — Pre-Analysis Plan v0.1
 
 ### Primary signal definitions fixed provisionally
 
@@ -109,7 +109,7 @@ All signal definitions are oriented so that a higher signal value corresponds to
 
 ---
 
-## 29 September 2026 — CRSP CIZ schema confirmation
+## 9 June 2026 — CRSP CIZ schema confirmation
 
 ### Daily Stock File confirmed
 
@@ -144,7 +144,7 @@ Inspect the Monthly Stock File variable descriptions and then the Delisting Info
 
 ---
 
-## 29 September 2026 — Monthly Stock File schema confirmation
+## 10 June 2026 — Monthly Stock File schema confirmation
 
 Reviewed the CIZ Monthly Stock File variable descriptions.
 
@@ -179,7 +179,7 @@ Inspect the separate Delisting Information schema before locking the production 
 
 ---
 
-## 29 September 2026 — Delisting Information schema confirmation
+## 11 June 2026 — Delisting Information schema confirmation
 
 Reviewed the CRSP CIZ Delisting Information variable descriptions.
 
@@ -218,7 +218,7 @@ Move from schema discovery to a small WRDS test extraction, while also confirmin
 
 ---
 
-## 29 September 2026 — Sample-construction protocol v0.1
+## 13 June 2026 — Sample-construction protocol v0.1
 
 ### Official CIZ universe mapping locked
 
@@ -266,7 +266,7 @@ Confirm the exact CIZ delisting-return semantics so that MthRet and DelRet are c
 
 ---
 
-## 29 September 2026 — Monthly production pipeline scaffold
+## 15 June 2026 — Monthly production pipeline scaffold
 
 Created the first reproducible Python implementation of the monthly data pipeline.
 
@@ -333,7 +333,7 @@ This revision occurred before momentum construction and before any concentration
 
 ---
 
-## 30 September 2026 — Momentum implementation scaffold
+## 18 June 2026 — Momentum implementation scaffold
 
 ### Primary signal implemented
 
@@ -366,7 +366,7 @@ The momentum notebook stops at construction and sanity checks. No concentration-
 
 ---
 
-## 30 September 2026 — Momentum signal validated v1 and baseline scaffold
+## 1 July 2026 — Momentum signal validated v1 and baseline scaffold
 
 ### Manual validation passed
 
@@ -403,7 +403,7 @@ No concentration-conditioning result has yet been estimated.
 
 ---
 
-## 30 September 2026 — HAC inference convention locked
+## 2 July 2026 — HAC inference convention locked
 
 Before any concentration-conditioned momentum test, the project fixed the time-series inference convention:
 
@@ -428,7 +428,7 @@ No concentration-conditioned inference has yet been run.
 
 ---
 
-## 30 September 2026 — Methodology gate before concentration conditioning
+## 5 July 2026 — Methodology gate before concentration conditioning
 
 A pre-conditioning review identified that market concentration and momentum portfolio eligibility should not use the same denominator universe.
 
@@ -462,7 +462,7 @@ No concentration-conditioned performance test has been run yet.
 
 ---
 
-## 30 September 2026 — Core concentration test specification locked
+## 10 July 2026 — Core concentration test specification locked
 
 Primary:
 - X = broad-market company-level Top10Share at formation month t;
@@ -485,7 +485,7 @@ New files:
 
 ---
 
-## 30 September 2026 — Timing robustness added after core concentration result
+## 13 July 2026 — Timing robustness added after core concentration result
 
 Before moving to more complex signal-neutralisation tests, the project adds one targeted timing robustness check.
 
@@ -515,7 +515,7 @@ New notebook:
 
 ---
 
-## 30 September 2026 — Mega-cap exclusion methodology locked
+## 16 July 2026 — Mega-cap exclusion methodology locked
 
 Before testing composition effects, the project fixes:
 
@@ -534,7 +534,7 @@ New files:
 
 ---
 
-## 30 September 2026 — Mega-cap mechanism decomposition locked
+## 18 July 2026 — Mega-cap mechanism decomposition locked
 
 Before moving to sector or beta neutralisation, the project separates:
 
@@ -555,7 +555,7 @@ New files:
 
 ---
 
-## 30 September 2026 — Industry-neutral methodology locked
+## 19 July 2026 — Industry-neutral methodology locked
 
 Primary:
 - FF49 classification from contemporaneous CRSP SICCD;
@@ -582,7 +582,7 @@ New files:
 
 ---
 
-## 30 September 2026 — Daily beta-input audit scaffold
+## 22 July 2026 — Daily beta-input audit scaffold
 
 Before rolling beta estimation, the project validates three daily inputs:
 1. CRSP CIZ daily stock returns;
@@ -598,7 +598,7 @@ New files:
 
 ---
 
-## 30 September 2026 — Daily duplicate resolution and beta methodology lock
+## 23 July 2026 — Daily duplicate resolution and beta methodology lock
 
 The CRSP daily stock extract contained 16,259 rows belonging to 7,837
 duplicated PERMNO-date groups. Investigation showed that every duplicated-key
@@ -624,7 +624,7 @@ coverage, distribution and extreme-value diagnostics in
 
 ---
 
-## 30 September 2026 — Ex-ante beta validation passed
+## 25 July 2026 — Ex-ante beta validation passed
 
 The frozen 252/5/126 CAPM beta estimator produced high and stable coverage
 across all 312 formation months. Overall valid-beta coverage averaged about
@@ -651,7 +651,7 @@ leg rescaling remains a robustness construction only.
 
 ---
 
-## 30 September 2026 — Beta diagnostics closed; project enters final synthesis
+## 26 September 2026 — Beta diagnostics closed; project enters final synthesis
 
 Additional diagnostics showed a correlation of approximately 0.05 between
 formation-date net momentum beta and next-month market excess return. Sorting
@@ -667,7 +667,7 @@ A working integrated interpretation is now documented in
 
 ---
 
-## 30 September 2026 — Beta-neutral diagnostics completed; synthesis stage opened
+## 28 September 2026 — Beta-neutral diagnostics completed; synthesis stage opened
 
 The beta-neutral portfolio analysis is now complete.
 
@@ -687,7 +687,7 @@ The project now moves to final synthesis, figures/tables, and research-paper pac
 
 ---
 
-## 30 September 2026 — Final-review bridge test locked before results
+## 31 July 2026 — Final-review bridge test locked before results
 
 A professor-style final review identified one remaining identification gap:
 the mega-cap decomposition establishes a direct portfolio-weight mechanism,
@@ -710,7 +710,7 @@ or lag search is added in this bridge stage.
 
 ---
 
-## 30 September 2026 — Concentration mechanism bridge results
+## 2 August 2026 — Concentration mechanism bridge results
 
 The pre-specified bridge tests distinguish a portfolio-exposure mechanism from
 a realised-return effect.
@@ -750,7 +750,7 @@ one-for-one factor beta.
 
 ---
 
-## 1 October 2026 — External momentum validation passed
+## 4 August 2026 — External momentum validation passed
 
 The project momentum implementation was externally validated against the
 Kenneth French US monthly Momentum Factor (Mom), aligned by realised holding
