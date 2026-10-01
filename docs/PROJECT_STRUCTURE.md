@@ -27,8 +27,8 @@ market-concentration-cross-sectional-signals/
 ├── paper/
 │   ├── README.md
 │   ├── research_note.md
-│   ├── Minhao_Qian_Market_Concentration_Momentum_Final_SEPTEMBER.pdf
-│   └── Minhao_Qian_Market_Concentration_Momentum_Final_SEPTEMBER.docx
+│   ├── Minhao_Qian_Market_Concentration_Momentum_Final.pdf
+│   └── Minhao_Qian_Market_Concentration_Momentum_Final.docx
 ├── results/
 │   ├── README.md
 │   ├── tables/
