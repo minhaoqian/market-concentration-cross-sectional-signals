@@ -1,6 +1,13 @@
 # Paper
 
-- `research_note.md` is the canonical final paper text.
-- `final/` is the recommended local destination for the final Word and PDF deliverables.
+The `paper/` folder is the publication-facing home of the project.
 
-The root `FINAL_REPORT.md` provides a short public-facing landing page for GitHub visitors.
+## Canonical files
+
+- `research_note.md` — GitHub-readable final paper text
+- `Minhao_Qian_Market_Concentration_Momentum_Final_SEPTEMBER.pdf` — final PDF
+- `Minhao_Qian_Market_Concentration_Momentum_Final_SEPTEMBER.docx` — final Word version
+
+The binary Word/PDF files are intentionally stored directly in `paper/` so a visitor does not need to open another nested folder.
+
+The root `FINAL_REPORT.md` is the short public-facing landing page.
