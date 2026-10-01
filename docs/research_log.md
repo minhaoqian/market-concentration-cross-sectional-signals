@@ -302,7 +302,7 @@ The notebook is an audit / validation notebook. It does not yet estimate factor 
 
 ---
 
-## 30 September 2026 — Concentration sanity check and PERMCO revision
+## 17 June 2026 — Concentration sanity check and PERMCO revision
 
 ### Sanity checks passed
 
@@ -651,7 +651,7 @@ leg rescaling remains a robustness construction only.
 
 ---
 
-## 26 September 2026 — Beta diagnostics closed; project enters final synthesis
+## 26 July 2026 — Beta diagnostics closed; project enters final synthesis
 
 Additional diagnostics showed a correlation of approximately 0.05 between
 formation-date net momentum beta and next-month market excess return. Sorting
@@ -667,7 +667,7 @@ A working integrated interpretation is now documented in
 
 ---
 
-## 28 September 2026 — Beta-neutral diagnostics completed; synthesis stage opened
+## 28 July 2026 — Beta-neutral diagnostics completed; synthesis stage opened
 
 The beta-neutral portfolio analysis is now complete.
 
